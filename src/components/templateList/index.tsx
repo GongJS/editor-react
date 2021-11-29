@@ -3,16 +3,12 @@ import {
   Row, Col, Card, Button,
 } from 'antd';
 import './style.less';
+import { TemplateProps } from '@/store';
 
 const { Meta } = Card;
 
-interface TemplateType {
-  coverImg?: string
-  title: string
-  id: number
-}
 interface TemplateListType {
-  list: TemplateType[]
+  list: TemplateProps[]
 }
 const TemplateList: React.FC<TemplateListType> = ({ list }) => (
   <div className="template-list-component">
@@ -33,8 +29,12 @@ const TemplateList: React.FC<TemplateListType> = ({ list }) => (
                   title={item.title}
                   description={(
                     <div className="description-detail">
-                      <span>作者：Test</span>
-                      <span className="user-number">0</span>
+                      <span>
+                        {' '}
+                        作者：
+                        { item.author }
+                      </span>
+                      <span className="user-number">{ item.copiedCount }</span>
                     </div>
                 )}
                 />
