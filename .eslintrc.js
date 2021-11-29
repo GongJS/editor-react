@@ -25,12 +25,8 @@ module.exports = {
         tsx: 'never',
       },
     ],
-    'react/function-component-definition': [
-      'error',
-      {
-        namedComponents: 'function-declaration',
-      },
-    ],
+    'react/function-component-definition': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
