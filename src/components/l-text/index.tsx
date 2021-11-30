@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
 import { pick } from 'lodash-es';
+import { textStylePropNames, textDefaultPropsType } from '@/defaultProps';
 import './style.less';
 
 interface LTextProps extends React.HTMLAttributes<HTMLDivElement> {
-  props: any
+  props: Partial<textDefaultPropsType>
 }
 
 const LText: React.FC<LTextProps> = (props) => {
-  const styleProps = useMemo(() => pick(props.props, ['fontSize']), [props.props]) as React.CSSProperties;
+  const styleProps = useMemo(() => pick(props.props, textStylePropNames), [props.props]) as React.CSSProperties;
   return (
     <div className="l-text-component" style={styleProps}>
       {props.props.text}

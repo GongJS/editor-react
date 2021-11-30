@@ -33,6 +33,7 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/destructuring-assignment': 'off',
+    'max-len': ['error', { code: 120 }],
   },
   settings: {
     'import/extensions': ['.js', '.jsx', 'ts', 'tsx'],
