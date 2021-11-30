@@ -7,7 +7,7 @@ interface LTextProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LText: React.FC<LTextProps> = (props) => {
-  const styleProps = useMemo(() => pick(props.props, ['font-size']), [props.props]) as React.CSSProperties;
+  const styleProps = useMemo(() => pick(props.props, ['fontSize']), [props.props]) as React.CSSProperties;
   return (
     <div className="l-text-component" style={styleProps}>
       {props.props.text}
