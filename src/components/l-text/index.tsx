@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
-import { pick } from 'lodash-es';
+import React from 'react';
 import { textStylePropNames, textDefaultPropsType } from '@/defaultProps';
+import useComponentCommon from '@/hooks/useComponentCommon';
 import './style.less';
 
 interface LTextProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -8,9 +8,9 @@ interface LTextProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LText: React.FC<LTextProps> = (props) => {
-  const styleProps = useMemo(() => pick(props.props, textStylePropNames), [props.props]) as React.CSSProperties;
+  const { styleProps, handleClick } = useComponentCommon(props.props, textStylePropNames);
   return (
-    <div className="l-text-component" style={styleProps}>
+    <div className="l-text-component" style={styleProps} onClick={handleClick}>
       {props.props.text}
     </div>
   );
