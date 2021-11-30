@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 import { useRecoilValue } from 'recoil';
 import editorData from '@/store/editor';
+import BootstrapComponent from '@/components/bootstrap-component';
 import './style.less';
 
 const {
@@ -31,7 +32,11 @@ const Editor: React.FC = () => {
             <div className="preview-list" id="canvas-area">
               {
               components.map((component) => (
-                component.props.text
+                <BootstrapComponent
+                  name={component.name}
+                  props={component.props}
+                  key={component.id}
+                />
               ))
             }
             </div>

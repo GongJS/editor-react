@@ -32,6 +32,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': ['error'],
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/destructuring-assignment': 'off',
   },
   settings: {
     'import/extensions': ['.js', '.jsx', 'ts', 'tsx'],
