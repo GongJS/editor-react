@@ -45,7 +45,7 @@ const globalData = atom({
   key: 'globalData',
   default: {
     templates: testData,
-    user: { isLogin: false },
+    user: { isLogin: false, userName: 'test' },
   },
 });
 

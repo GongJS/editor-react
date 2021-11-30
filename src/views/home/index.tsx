@@ -4,7 +4,8 @@ import {
   useRecoilValue,
 } from 'recoil';
 import Store from '@/store';
-import TemplateList from '@/components/templateList';
+import TemplateList from '@/components/template-list';
+import UserProfile from '@/components/user-profile';
 import './style.less';
 
 const {
@@ -20,6 +21,7 @@ const Home: React.FC = () => {
           <div className="page-title">
             乐高
           </div>
+          <UserProfile user={store.user} />
         </Header>
         <Content className="home-layout">
           <div className="content-container">
