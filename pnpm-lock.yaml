@@ -6,6 +6,7 @@ specifiers:
   '@types/node': ^16.11.10
   '@types/react': ^17.0.0
   '@types/react-dom': ^17.0.0
+  '@types/uuid': ^8.3.3
   '@typescript-eslint/eslint-plugin': ^4.0.1
   '@typescript-eslint/parser': ^4.0.1
   '@vitejs/plugin-react': ^1.0.0
@@ -21,20 +22,24 @@ specifiers:
   husky: ^7.0.4
   less: ^4.1.2
   lint-staged: ^12.1.2
+  lodash-es: ^4.17.21
   prettier: 2.5.0
   react: ^17.0.0
   react-dom: ^17.0.0
   react-router-dom: '6'
   recoil: ^0.5.2
   typescript: ^4.3.2
+  uuid: ^8.3.2
   vite: ^2.6.4
 
 dependencies:
   antd: 4.17.2_react-dom@17.0.2+react@17.0.2
+  lodash-es: 4.17.21
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-router-dom: 6.0.2_react-dom@17.0.2+react@17.0.2
   recoil: 0.5.2_react-dom@17.0.2+react@17.0.2
+  uuid: 8.3.2
 
 devDependencies:
   '@commitlint/cli': 15.0.0
@@ -42,6 +47,7 @@ devDependencies:
   '@types/node': 16.11.10
   '@types/react': 17.0.37
   '@types/react-dom': 17.0.11
+  '@types/uuid': 8.3.3
   '@typescript-eslint/eslint-plugin': 4.33.0_d00b196ac5df1286ea7e45797bebddbc
   '@typescript-eslint/parser': 4.33.0_eslint@7.32.0+typescript@4.5.2
   '@vitejs/plugin-react': 1.1.0
@@ -666,6 +672,10 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+    dev: true
+
+  /@types/uuid/8.3.3:
+    resolution: {integrity: sha512-0LbEEx1zxrYB3pgpd1M5lEhLcXjKJnYghvhTRgaBeUivLHMDM1TzF3IJ6hXU2+8uA4Xz+5BA63mtZo5DjVT8iA==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/4.33.0_d00b196ac5df1286ea7e45797bebddbc:
@@ -2600,6 +2610,10 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
   /lodash.get/4.4.2:
     resolution: {integrity: sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=}
     dev: true
@@ -4217,6 +4231,11 @@ packages:
   /util-deprecate/1.0.2:
     resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
     dev: true
+
+  /uuid/8.3.2:
+    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
+    dev: false
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
