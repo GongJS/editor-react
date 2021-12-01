@@ -3,7 +3,7 @@ import {
 } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 
-interface ComponentData {
+export interface ComponentData {
   // 这个元素的 属性，属性请详见下面
   props: { [key: string]: any };
   // id，uuid v4 生成

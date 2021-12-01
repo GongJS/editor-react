@@ -35,6 +35,10 @@ module.exports = {
     'react/destructuring-assignment': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/heading-has-content': 'off',
+    'react/no-array-index-key': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
     'max-len': ['error', { code: 120 }],
   },
   settings: {

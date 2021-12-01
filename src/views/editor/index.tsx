@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Layout } from 'antd';
-import { useRecoilValue } from 'recoil';
-import editorData from '@/store/editor';
+import { useRecoilState } from 'recoil';
+import { v4 as uuidv4 } from 'uuid';
+import editorData, { ComponentData } from '@/store/editor';
 import BootstrapComponent from '@/components/bootstrap-component';
+import ComponentsList from '@/components/components-list';
+import { textList, TextComponentType } from '@/defaultTemplates';
 import './style.less';
 
 const {
@@ -10,7 +13,22 @@ const {
 } = Layout;
 
 const Editor: React.FC = () => {
-  const { components } = useRecoilValue(editorData);
+  const [editor, setEditor] = useRecoilState(editorData);
+  const addItem = useCallback(({ text, styleProps } :TextComponentType): void => {
+    const newComponent: ComponentData = {
+      id: uuidv4(),
+      name: 'l-text',
+      props: {
+        text,
+        ...styleProps,
+      },
+    };
+    const newComponents = [...editor.components, newComponent];
+    setEditor((oldEditor) => ({
+      ...oldEditor,
+      components: newComponents,
+    }));
+  }, [editor.components]);
   return (
     <div className="editor" id="editor-layout-main">
       <Layout style={{ background: '#fff' }}>
@@ -24,6 +42,7 @@ const Editor: React.FC = () => {
         <Sider width="300" style={{ background: 'yellow' }}>
           <div className="sidebar-container">
             组件列表
+            <ComponentsList list={textList} onItemClick={addItem} />
           </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
@@ -31,7 +50,7 @@ const Editor: React.FC = () => {
             <p>画布区域</p>
             <div className="preview-list" id="canvas-area">
               {
-              components.map((component) => (
+              editor.components.map((component) => (
                 <BootstrapComponent
                   name={component.name}
                   props={component.props}
