@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 import { Layout } from 'antd';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
-import editorData, { ComponentData } from '@/store/editor';
+import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
 import BootstrapComponent from '@/components/bootstrap-component';
 import ComponentsList from '@/components/components-list';
+import EditorWrapper from '@/components/editor-wrapper';
 import { textList, TextComponentType } from '@/defaultTemplates';
 import './style.less';
 
@@ -14,6 +15,7 @@ const {
 
 const Editor: React.FC = () => {
   const [editor, setEditor] = useRecoilState(editorData);
+  const currentElement = useRecoilValue(getCurrentElement);
   const addItem = useCallback(({ text, styleProps } :TextComponentType): void => {
     const newComponent: ComponentData = {
       id: uuidv4(),
@@ -51,11 +53,16 @@ const Editor: React.FC = () => {
             <div className="preview-list" id="canvas-area">
               {
               editor.components.map((component) => (
-                <BootstrapComponent
-                  name={component.name}
-                  props={component.props}
+                <EditorWrapper
                   key={component.id}
-                />
+                  id={component.id}
+                  active={currentElement?.id === component.id}
+                >
+                  <BootstrapComponent
+                    name={component.name}
+                    props={component.props}
+                  />
+                </EditorWrapper>
               ))
             }
             </div>

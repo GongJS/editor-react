@@ -1,0 +1,15 @@
+.editor-wrapper {
+  padding: 0;
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+  &:hover{
+    border: 1px dashed #ccc;
+  }
+}
+
+.editor-wrapper.active {
+  border: 1px solid #1890ff;
+  user-select: none;
+  z-index: 1500;
+}

@@ -35,7 +35,6 @@ export const defaultTextTemplates = [
     paddingRight: '10px',
     paddingTop: '5px',
     paddingBottom: '5px',
-    width: '100px',
     name: 'button',
     textAlign: 'center',
   },

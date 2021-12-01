@@ -10,7 +10,7 @@ const componentMap = {
 const PlainComponent: React.FC<TextComponentType> = ({ name, text, styleProps }) => {
   const Tag = componentMap[name as keyof typeof componentMap];
   if (!Tag) throw new Error('该组件不存在');
-  return <Tag style={{ ...styleProps }}>{text}</Tag>;
+  return <Tag style={{ ...styleProps as React.CSSProperties }}>{text}</Tag>;
 };
 
 export default PlainComponent;

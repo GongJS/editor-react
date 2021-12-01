@@ -1,5 +1,6 @@
 import {
   atom,
+  selector,
 } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 import { TextComponentProps } from '@/defaultProps';
@@ -38,6 +39,14 @@ const editorData = atom({
   default: {
     components: testComponents,
     currentElement: '',
+  },
+});
+
+export const getCurrentElement = selector({
+  key: 'getCurrentElement',
+  get: ({ get }) => {
+    const state = get(editorData);
+    return state.components.find((component) => component.id === state.currentElement);
   },
 });
 
