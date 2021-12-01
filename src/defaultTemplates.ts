@@ -1,11 +1,10 @@
 import { omit } from 'lodash-es';
+import { TextComponentProps } from '@/defaultProps';
 
 export interface TextComponentType {
   name: string;
   text: string,
-  styleProps: {
-    [key: string]: string,
-  }
+  styleProps: Partial<Omit<TextComponentProps, 'text'>>
 }
 export const defaultTextTemplates = [
   {
