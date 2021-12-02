@@ -39,6 +39,7 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
+    'no-param-reassign': 'off',
     'max-len': ['error', { code: 120 }],
   },
   settings: {

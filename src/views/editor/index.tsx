@@ -6,6 +6,7 @@ import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
 import BootstrapComponent from '@/components/bootstrap-component';
 import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
+import PropsTable from '@/components/props-table';
 import { textList, TextComponentType } from '@/defaultTemplates';
 import './style.less';
 
@@ -70,6 +71,9 @@ const Editor: React.FC = () => {
         </Layout>
         <Sider width="300" style={{ background: 'purple' }} className="settings-panel">
           组件属性
+          {
+            currentElement && <PropsTable props={currentElement.props} />
+          }
         </Sider>
       </Layout>
     </div>

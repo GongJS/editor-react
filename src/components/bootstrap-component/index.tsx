@@ -1,4 +1,3 @@
-import { Button, Switch, Input } from 'antd';
 import React from 'react';
 import LText from '@/components/l-text';
 
@@ -8,9 +7,6 @@ interface componentProps extends React.HTMLAttributes<Element> {
 }
 
 const componentMap = {
-  button: Button,
-  switch: Switch,
-  input: Input,
   'l-text': LText,
 };
 
