@@ -3,8 +3,10 @@ import { reduce } from 'lodash-es';
 import {
   Button, Input, Switch, InputNumber, Slider, Select, Radio,
 } from 'antd';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { TextComponentProps } from '@/defaultProps';
 import './style.less';
+import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
 
 export interface PropToForm {
   component: string;
@@ -13,6 +15,7 @@ export interface PropToForm {
   extraProps?: { [key: string]: any };
   text?: string;
   options?: { text: string; value: any }[];
+  afterTransform?: (e: any) => any;
   initialTransform?: (v: any) => any;
 }
 export type PropsToForms = {
@@ -21,18 +24,22 @@ export type PropsToForms = {
 
 export const mapPropsToForms: PropsToForms = {
   text: {
-    component: 'input',
+    text: '文本',
+    component: 'textarea',
+    extraProps: { rows: 3 },
+    afterTransform: (e: any) => e.target.value,
   },
   fontSize: {
     text: '字号',
     component: 'input-number',
-    initialTransform: (v: string) => parseInt(v, 10),
+    initialTransform: (e: any) => parseInt(e, 10),
+    afterTransform: (e: number) => (e ? `${e}px` : ''),
   },
   lineHeight: {
     text: '行高',
     component: 'slider',
     extraProps: { min: 0, max: 3, step: 0.1 },
-    initialTransform: (v: string) => parseInt(v, 10),
+    afterTransform: (e: number) => e.toString(),
   },
   textAlign: {
     component: 'radio-group',
@@ -43,6 +50,7 @@ export const mapPropsToForms: PropsToForms = {
       { value: 'center', text: '中' },
       { value: 'right', text: '右' },
     ],
+    afterTransform: (e: any) => e.target.value,
   },
   fontFamily: {
     component: 'select',
@@ -65,15 +73,35 @@ const componentMap = {
   button: Button,
   switch: Switch,
   input: Input,
-  'input-number': InputNumber,
+  textarea: Input.TextArea,
   slider: Slider,
-  'radio-group': Radio.Group,
-  'radio-button': Radio.Button,
   select: Select,
+  'radio-group': Radio.Group,
+  'input-number': InputNumber,
+  'radio-button': Radio.Button,
   'select-option': Select.Option,
 };
 
 const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
+  const [editor, setEditor] = useRecoilState(editorData);
+  const currentElement = useRecoilValue(getCurrentElement);
+  const copyComponents = JSON.parse(JSON.stringify(editor.components));
+  const copyCurrentElement = JSON.parse(JSON.stringify(currentElement));
+  const handleChange = (e: any, k: string, v: PropToForm) => {
+    if (!currentElement) return;
+    const value = v.afterTransform ? v.afterTransform(e) : e;
+    copyCurrentElement!.props[k as keyof TextComponentProps] = value;
+    copyComponents.map((component: ComponentData) => {
+      if (component.id === currentElement.id) {
+        component.props[k as keyof TextComponentProps] = value;
+      }
+      return component;
+    });
+    setEditor((oldEditor) => ({
+      ...oldEditor,
+      components: copyComponents,
+    }));
+  };
   const finalProps = useMemo(() => reduce(props, (result, value, key) => {
     const newKey = key as keyof TextComponentProps;
     const item = mapPropsToForms[newKey];
@@ -88,14 +116,19 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
       {
     Object.entries(finalProps).map((item) => {
       const value = item[1];
+      const key = item[0];
       const Tag = componentMap[value.component as keyof typeof componentMap] as any;
       const SubTag = componentMap[value.subComponent as keyof typeof componentMap] as any;
       return (
-        <div className="prop-item" key={item[0]}>
+        <div className="prop-item" key={key}>
           {
             value.text && <span className="label">{ value.text }</span>
         }
-          <Tag value={value.value} {...value.extraProps}>
+          <Tag
+            value={value.initialTransform ? value.initialTransform(value.value) : value.value}
+            {...value.extraProps}
+            onChange={(e: any) => handleChange(e, key, value)}
+          >
             {
               value.options && value.options.map((option, index) => <SubTag value={option.value} key={index}>{option.text}</SubTag>)
             }
