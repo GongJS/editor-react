@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { TextComponentProps } from '@/defaultProps';
+import ColorPicker from '@/components/color-picker';
 import './style.less';
 import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
 
@@ -65,6 +66,10 @@ export const mapPropsToForms: PropsToForms = {
       { text: '仿宋', value: '"FangSong","STFangsong"' },
     ],
   },
+  color: {
+    component: 'color',
+    text: '字体颜色',
+  },
 };
 
 interface PropsTableProps {
@@ -81,6 +86,7 @@ const componentMap = {
   textarea: Input.TextArea,
   slider: Slider,
   select: Select,
+  color: ColorPicker,
   'radio-group': Radio.Group,
   'input-number': InputNumber,
   'radio-button': Radio.Button,

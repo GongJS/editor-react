@@ -29,6 +29,7 @@ specifiers:
   react-dom: ^17.0.0
   react-router-dom: '6'
   recoil: ^0.5.2
+  rgb-hex: ^4.0.0
   typescript: ^4.3.2
   uuid: ^8.3.2
   vite: ^2.6.4
@@ -40,6 +41,7 @@ dependencies:
   react-dom: 17.0.2_react@17.0.2
   react-router-dom: 6.0.2_react-dom@17.0.2+react@17.0.2
   recoil: 0.5.2_react-dom@17.0.2+react@17.0.2
+  rgb-hex: 4.0.0
   uuid: 8.3.2
 
 devDependencies:
@@ -3779,6 +3781,11 @@ packages:
   /rfdc/1.3.0:
     resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}
     dev: true
+
+  /rgb-hex/4.0.0:
+    resolution: {integrity: sha512-Eg2ev5CiMBnQ9Gpflmqbwbso0CCdISqtVIow7OpYSLN1ULUv2jTB9YieS1DSSn/17AD7KkPWDPzSFzI4GSuu/Q==}
+    engines: {node: '>=12'}
+    dev: false
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
