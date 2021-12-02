@@ -38,8 +38,9 @@ export const mapPropsToForms: PropsToForms = {
   lineHeight: {
     text: '行高',
     component: 'slider',
-    extraProps: { min: 0, max: 3, step: 0.1 },
+    extraProps: { min: 0, max: 3, step: 1 },
     afterTransform: (e: number) => e.toString(),
+    initialTransform: (e: any) => parseInt(e, 10),
   },
   textAlign: {
     component: 'radio-group',
@@ -84,13 +85,12 @@ const componentMap = {
 
 const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
   const [editor, setEditor] = useRecoilState(editorData);
-  const currentElement = useRecoilValue(getCurrentElement);
+  const currentElement = JSON.parse(JSON.stringify(useRecoilValue(getCurrentElement)));
   const copyComponents = JSON.parse(JSON.stringify(editor.components));
-  const copyCurrentElement = JSON.parse(JSON.stringify(currentElement));
   const handleChange = (e: any, k: string, v: PropToForm) => {
     if (!currentElement) return;
     const value = v.afterTransform ? v.afterTransform(e) : e;
-    copyCurrentElement!.props[k as keyof TextComponentProps] = value;
+    currentElement!.props[k as keyof TextComponentProps] = value;
     copyComponents.map((component: ComponentData) => {
       if (component.id === currentElement.id) {
         component.props[k as keyof TextComponentProps] = value;
