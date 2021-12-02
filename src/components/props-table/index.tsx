@@ -70,6 +70,10 @@ export const mapPropsToForms: PropsToForms = {
 interface PropsTableProps {
   props: Partial<TextComponentProps>
 }
+interface TagProps {
+  value: string
+  onChange?: (e: any) => void
+}
 const componentMap = {
   button: Button,
   switch: Switch,
@@ -117,8 +121,8 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
     Object.entries(finalProps).map((item) => {
       const value = item[1];
       const key = item[0];
-      const Tag = componentMap[value.component as keyof typeof componentMap] as any;
-      const SubTag = componentMap[value.subComponent as keyof typeof componentMap] as any;
+      const Tag = componentMap[value.component as keyof typeof componentMap] as React.FC<TagProps>;
+      const SubTag = componentMap[value.subComponent as keyof typeof componentMap] as React.FC<TagProps>;
       return (
         <div className="prop-item" key={key}>
           {
