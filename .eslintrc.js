@@ -40,7 +40,7 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     'no-param-reassign': 'off',
-    'max-len': ['error', { code: 120 }],
+    'max-len': ['error', { code: 140 }],
   },
   settings: {
     'import/extensions': ['.js', '.jsx', 'ts', 'tsx'],

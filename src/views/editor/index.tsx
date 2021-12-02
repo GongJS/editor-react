@@ -69,7 +69,7 @@ const Editor: React.FC = () => {
             </div>
           </Content>
         </Layout>
-        <Sider width="300" style={{ background: 'purple' }} className="settings-panel">
+        <Sider width="300" style={{ background: 'white' }} className="settings-panel">
           组件属性
           {
             currentElement && <PropsTable props={currentElement.props} />
