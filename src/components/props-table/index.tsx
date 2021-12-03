@@ -3,11 +3,10 @@ import { reduce } from 'lodash-es';
 import {
   Button, Input, Switch, InputNumber, Slider, Select, Radio,
 } from 'antd';
-import { useRecoilState, useRecoilValue } from 'recoil';
 import { TextComponentProps } from '@/defaultProps';
 import ColorPicker from '@/components/color-picker';
 import './style.less';
-import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
+import useComponentDataField from '@/hooks/useComponentDataField';
 
 export interface PropToForm {
   component: string;
@@ -94,23 +93,10 @@ const componentMap = {
 };
 
 const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
-  const [editor, setEditor] = useRecoilState(editorData);
-  const currentElement = JSON.parse(JSON.stringify(useRecoilValue(getCurrentElement)));
-  const copyComponents = JSON.parse(JSON.stringify(editor.components));
-  const handleChange = (e: any, k: string, v: PropToForm) => {
-    if (!currentElement) return;
+  const { updateComponentField } = useComponentDataField();
+  const handleChange = (e: any, k: keyof TextComponentProps, v: PropToForm) => {
     const value = v.afterTransform ? v.afterTransform(e) : e;
-    currentElement!.props[k as keyof TextComponentProps] = value;
-    copyComponents.map((component: ComponentData) => {
-      if (component.id === currentElement.id) {
-        component.props[k as keyof TextComponentProps] = value;
-      }
-      return component;
-    });
-    setEditor((oldEditor) => ({
-      ...oldEditor,
-      components: copyComponents,
-    }));
+    updateComponentField(k, value);
   };
   const finalProps = useMemo(() => reduce(props, (result, value, key) => {
     const newKey = key as keyof TextComponentProps;
@@ -126,7 +112,7 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
       {
     Object.entries(finalProps).map((item) => {
       const value = item[1];
-      const key = item[0];
+      const key = item[0] as keyof TextComponentProps;
       const Tag = componentMap[value.component as keyof typeof componentMap] as React.FC<TagProps>;
       const SubTag = componentMap[value.subComponent as keyof typeof componentMap] as React.FC<TagProps>;
       return (
@@ -134,15 +120,17 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
           {
             value.text && <span className="label">{ value.text }</span>
         }
-          <Tag
-            value={value.initialTransform ? value.initialTransform(value.value) : value.value}
-            {...value.extraProps}
-            onChange={(e: any) => handleChange(e, key, value)}
-          >
-            {
+          <div className="prop-component">
+            <Tag
+              value={value.initialTransform ? value.initialTransform(value.value) : value.value}
+              {...value.extraProps}
+              onChange={(e: any) => handleChange(e, key, value)}
+            >
+              {
               value.options && value.options.map((option, index) => <SubTag value={option.value} key={index}>{option.text}</SubTag>)
             }
-          </Tag>
+            </Tag>
+          </div>
         </div>
       );
     })
