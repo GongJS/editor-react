@@ -1,13 +1,12 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Layout } from 'antd';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { v4 as uuidv4 } from 'uuid';
-import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
+import { useRecoilValue } from 'recoil';
+import editorData, { getCurrentElement } from '@/store/editor';
 import BootstrapComponent from '@/components/bootstrap-component';
 import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
-import { textList, TextComponentType } from '@/defaultTemplates';
+import { textList } from '@/defaultTemplates';
 import './style.less';
 
 const {
@@ -15,23 +14,8 @@ const {
 } = Layout;
 
 const Editor: React.FC = () => {
-  const [editor, setEditor] = useRecoilState(editorData);
+  const editor = useRecoilValue(editorData);
   const currentElement = useRecoilValue(getCurrentElement);
-  const addItem = useCallback(({ text, styleProps } :TextComponentType): void => {
-    const newComponent: ComponentData = {
-      id: uuidv4(),
-      name: 'l-text',
-      props: {
-        text,
-        ...styleProps,
-      },
-    };
-    const newComponents = [...editor.components, newComponent];
-    setEditor((oldEditor) => ({
-      ...oldEditor,
-      components: newComponents,
-    }));
-  }, [editor.components]);
   return (
     <div className="editor" id="editor-layout-main">
       <Layout style={{ background: '#fff' }}>
@@ -45,7 +29,7 @@ const Editor: React.FC = () => {
         <Sider width="300" style={{ background: 'yellow' }}>
           <div className="sidebar-container">
             组件列表
-            <ComponentsList list={textList} onItemClick={addItem} />
+            <ComponentsList list={textList} />
           </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>

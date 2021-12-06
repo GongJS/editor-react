@@ -1,5 +1,6 @@
 import React from 'react';
 import LText from '@/components/l-text';
+import LImage from '@/components/l-image';
 
 interface componentProps extends React.HTMLAttributes<Element> {
   name: string
@@ -8,6 +9,7 @@ interface componentProps extends React.HTMLAttributes<Element> {
 
 const componentMap = {
   'l-text': LText,
+  'l-image': LImage,
 };
 
 const BootstrapComponent: React.FC<componentProps> = (props) => {

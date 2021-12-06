@@ -21,7 +21,11 @@ export interface PropToForm {
 export type PropsToForms = {
   [P in keyof TextComponentProps]?: PropToForm
 }
-
+const pxToNumberHandler: PropToForm = {
+  component: 'input-number',
+  initialTransform: (v: string) => parseInt(v, 10),
+  afterTransform: (e: number) => (e ? `${e}px` : ''),
+};
 export const mapPropsToForms: PropsToForms = {
   text: {
     text: '文本',
@@ -64,6 +68,10 @@ export const mapPropsToForms: PropsToForms = {
       { text: '楷体', value: '"KaiTi","STKaiti"' },
       { text: '仿宋', value: '"FangSong","STFangsong"' },
     ],
+  },
+  width: {
+    text: '宽度',
+    ...pxToNumberHandler,
   },
   color: {
     component: 'color',

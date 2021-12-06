@@ -3,15 +3,15 @@ import {
   selector,
 } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
-import { TextComponentProps } from '@/defaultProps';
+import { TextComponentProps, ImageComponentProps } from '@/defaultProps';
 
 export interface ComponentData {
   // 这个元素的 属性，属性请详见下面
-  props: Partial<TextComponentProps>;
+  props: Partial<TextComponentProps> & Partial<ImageComponentProps>;
   // id，uuid v4 生成
   id: string;
   // 业务组件库名称 l-text，l-image 等等
-  name: string;
+  name: 'l-text' | 'l-image';
 }
 
 export interface EditorProps {

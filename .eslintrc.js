@@ -41,6 +41,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error'],
     'no-param-reassign': 'off',
     'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'no-nested-ternary': 'off',
     'max-len': ['error', { code: 140 }],
   },
   settings: {
