@@ -1,11 +1,13 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import StyledUploader from '@/components/styled-uploader';
-import { ImageComponentType, TextComponentType } from '@/defaultTemplates';
+import { TextComponentType } from '@/defaultTemplates';
 import PlainComponent from '@/components/plain-component';
 import { ComponentData } from '@/store/editor';
 import { getImageDimensions } from '@/helper';
-import useAddComponentData from '@/hooks/useAddComponentData';
+import { commonDefaultProps } from '@/defaultProps';
+import { UploadResp } from '@/extraType';
+import useComponentData from '@/hooks/useComponenetData';
 import './style.less';
 
 interface ComponentsListProps {
@@ -13,7 +15,7 @@ interface ComponentsListProps {
 }
 
 const ComponentsList: React.FC<ComponentsListProps> = ({ list }) => {
-  const { addComponentData } = useAddComponentData();
+  const { addComponent } = useComponentData();
   const addTextComponent = (component: TextComponentType) => {
     const newComponent: ComponentData = {
       id: uuidv4(),
@@ -23,22 +25,23 @@ const ComponentsList: React.FC<ComponentsListProps> = ({ list }) => {
         ...component.styleProps,
       },
     };
-    addComponentData(newComponent);
+    addComponent(newComponent);
   };
-  const addImageComponent = (data : ImageComponentType) => {
-    const { imgSrc, styleProps, name } = data;
-    getImageDimensions(imgSrc).then(({ width }) => {
+  const addImageComponent = (data : UploadResp) => {
+    const src = data.data.urls[0];
+    const styleProps = { ...commonDefaultProps };
+    getImageDimensions(src).then(({ width }) => {
       const maxWidth = 373;
       styleProps.width = `${(width > maxWidth) ? maxWidth : width}px`;
       const newComponent: ComponentData = {
         id: uuidv4(),
-        name,
+        name: 'l-image',
         props: {
-          imgSrc,
-          ...styleProps,
+          src,
+          ...commonDefaultProps,
         },
       };
-      addComponentData(newComponent);
+      addComponent(newComponent);
     });
   };
   return (
@@ -50,7 +53,7 @@ const ComponentsList: React.FC<ComponentsListProps> = ({ list }) => {
             </div>
           ))
       }
-      <StyledUploader onItemClick={addImageComponent} />
+      <StyledUploader onSuccess={addImageComponent} />
     </div>
   );
 };

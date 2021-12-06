@@ -14,7 +14,7 @@ const LImage: React.FC<LImageProps> = (props) => {
     handleClick();
   };
   return (
-    <img className="l-image-component" style={styleProps} onClick={onClick} src={props.props.imgSrc} alt="" />
+    <img className="l-image-component" style={styleProps} onClick={onClick} src={props.props.src} alt="" />
   );
 };
 

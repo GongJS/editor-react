@@ -2,23 +2,14 @@ import React from 'react';
 import { FileImageOutlined, LoadingOutlined } from '@ant-design/icons';
 import { commonUploadCheck } from '@/helper';
 import Uploader from '@/components/uploader';
-import { ImageComponentType } from '@/defaultTemplates';
-import { commonDefaultProps } from '@/defaultProps';
 import { UploadResp } from '@/extraType';
 import './style.less';
 
 interface StyledUploaderProps {
-  onItemClick: (params: ImageComponentType) => void
+  onSuccess: (params: UploadResp) => void
 }
 
-const StyledUploader: React.FC<StyledUploaderProps> = ({ onItemClick }) => {
-  const handleUploadSuccess = (data: UploadResp) => {
-    onItemClick({
-      name: 'l-image',
-      imgSrc: data.data.urls[0],
-      styleProps: { ...commonDefaultProps },
-    });
-  };
+const StyledUploader: React.FC<StyledUploaderProps> = ({ onSuccess }) => {
   const loadingSlot = (
     <div className="uploader-container">
       <LoadingOutlined spin />
@@ -37,7 +28,7 @@ const StyledUploader: React.FC<StyledUploaderProps> = ({ onItemClick }) => {
         loadingSlot={loadingSlot}
         uploadedSlot={uploadedSlot}
         beforeUpload={commonUploadCheck}
-        onSuccess={handleUploadSuccess}
+        onSuccess={onSuccess}
       >
         <div className="uploader-container">
           <FileImageOutlined />

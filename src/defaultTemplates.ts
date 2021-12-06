@@ -8,7 +8,7 @@ export interface TextComponentType {
 }
 export interface ImageComponentType {
   name: 'l-image';
-  imgSrc: string,
+  src: string,
   styleProps: Partial<Omit<ImageComponentProps, 'src'>>
 }
 export const defaultTextTemplates = [

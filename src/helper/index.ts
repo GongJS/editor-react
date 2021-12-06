@@ -1,12 +1,5 @@
 import { message } from 'antd';
 
-export interface UploadImgProps {
-  data: {
-    urls: string[];
-  };
-  errno: number;
-  file: File;
-}
 interface CheckCondition {
   format?: string[];
   // 使用多少 M 为单位
