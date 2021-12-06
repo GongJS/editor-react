@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@ant-design/icons': ^4.7.0
   '@commitlint/cli': ^15.0.0
   '@commitlint/config-conventional': ^15.0.0
   '@types/lodash-es': ^4.17.5
@@ -13,6 +14,7 @@ specifiers:
   '@vitejs/plugin-react': ^1.0.0
   '@vitejs/plugin-react-refresh': ^1.3.5
   antd: ^4.17.2
+  axios: ^0.24.0
   eslint: ^7.32.0
   eslint-config-airbnb: ^19.0.1
   eslint-import-resolver-typescript: ^2.5.0
@@ -29,19 +31,19 @@ specifiers:
   react-dom: ^17.0.0
   react-router-dom: '6'
   recoil: ^0.5.2
-  rgb-hex: ^4.0.0
   typescript: ^4.3.2
   uuid: ^8.3.2
   vite: ^2.6.4
 
 dependencies:
+  '@ant-design/icons': 4.7.0_react-dom@17.0.2+react@17.0.2
   antd: 4.17.2_react-dom@17.0.2+react@17.0.2
+  axios: 0.24.0
   lodash-es: 4.17.21
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-router-dom: 6.0.2_react-dom@17.0.2+react@17.0.2
   recoil: 0.5.2_react-dom@17.0.2+react@17.0.2
-  rgb-hex: 4.0.0
   uuid: 8.3.2
 
 devDependencies:
@@ -1052,6 +1054,14 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /axios/0.24.0:
+    resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
+    dependencies:
+      follow-redirects: 1.14.5
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /axobject-query/2.2.0:
     resolution: {integrity: sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==}
     dev: true
@@ -2035,6 +2045,16 @@ packages:
   /flatted/3.2.4:
     resolution: {integrity: sha512-8/sOawo8tJ4QOBX8YlQBMxL8+RLZfxMQOif9o0KUKTNTjMYElWPE0r/m5VNFxTRd0NSw8qSy8dajrwX4RYI1Hw==}
     dev: true
+
+  /follow-redirects/1.14.5:
+    resolution: {integrity: sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
 
   /fs-extra/10.0.0:
     resolution: {integrity: sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==}
@@ -3781,11 +3801,6 @@ packages:
   /rfdc/1.3.0:
     resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}
     dev: true
-
-  /rgb-hex/4.0.0:
-    resolution: {integrity: sha512-Eg2ev5CiMBnQ9Gpflmqbwbso0CCdISqtVIow7OpYSLN1ULUv2jTB9YieS1DSSn/17AD7KkPWDPzSFzI4GSuu/Q==}
-    engines: {node: '>=12'}
-    dev: false
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
