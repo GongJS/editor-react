@@ -1,10 +1,15 @@
 import { omit } from 'lodash-es';
-import { TextComponentProps } from '@/defaultProps';
+import { TextComponentProps, ImageComponentProps } from '@/defaultProps';
 
 export interface TextComponentType {
-  name: string;
+  name: 'l-text' | string;
   text: string,
   styleProps: Partial<Omit<TextComponentProps, 'text'>>
+}
+export interface ImageComponentType {
+  name: 'l-image';
+  imgSrc: string,
+  styleProps: Partial<Omit<ImageComponentProps, 'src'>>
 }
 export const defaultTextTemplates = [
   {
