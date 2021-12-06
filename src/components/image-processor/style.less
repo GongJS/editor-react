@@ -1,0 +1,25 @@
+.image-processor {
+  display: flex;
+  justify-content: space-between;
+  .image-preview {
+    width: 150px;
+    height: 84px;
+    border: 1px dashed #e6ebed;
+    background: no-repeat 50%/contain;
+  }
+  .image-preview.extraHeight {
+    height: 110px;
+  }
+  .image-cropper img {
+    display: block;
+    /* This rule is very important, please don't ignore this */
+    max-width: 100%;
+  }
+  .image-process {
+    padding: 5px 0;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
