@@ -31,7 +31,7 @@ export const commonDefaultProps: CommonComponentProps = {
   url: '',
   // size
   height: '',
-  width: '318px',
+  width: '373px',
   paddingLeft: '0px',
   paddingRight: '0px',
   paddingTop: '0px',
@@ -50,6 +50,9 @@ export const commonDefaultProps: CommonComponentProps = {
   top: '0',
   right: '0',
 };
+export interface ImageComponentProps extends CommonComponentProps {
+  imgSrc: string;
+}
 export interface TextComponentProps extends CommonComponentProps {
   text: string;
   fontSize: string;
@@ -62,6 +65,10 @@ export interface TextComponentProps extends CommonComponentProps {
   color: string;
   backgroundColor: string;
 }
+export const imageDefaultProps: ImageComponentProps = {
+  imgSrc: '',
+  ...commonDefaultProps,
+};
 export const textDefaultProps: TextComponentProps = {
   // basic props - font styles
   text: '正文内容',
@@ -77,3 +84,4 @@ export const textDefaultProps: TextComponentProps = {
   ...commonDefaultProps,
 };
 export const textStylePropNames = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text');
+export const imageStylePropsNames = without(Object.keys(imageDefaultProps), 'imgSrc', 'actionType', 'url', 'text');
