@@ -4,6 +4,7 @@ import Home from '@/views/home';
 import TemplateDetail from '@/views/templateDetail';
 import Editor from '@/views/editor';
 import 'antd/dist/antd.less';
+import 'cropperjs/dist/cropper.css';
 import './App.css';
 
 function App() {
