@@ -1,17 +1,19 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Layout, Tabs, Empty } from 'antd';
 import { useRecoilValue } from 'recoil';
 import editorData, { getCurrentElement } from '@/store/editor';
 import BootstrapComponent from '@/components/bootstrap-component';
 import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
+import LayerList from '@/components/layer-list';
 import { textList } from '@/defaultTemplates';
 import './style.less';
 
 const {
   Header, Content, Sider,
 } = Layout;
+const { TabPane } = Tabs;
 
 const Editor: React.FC = () => {
   const editor = useRecoilValue(editorData);
@@ -42,6 +44,7 @@ const Editor: React.FC = () => {
                   key={component.id}
                   id={component.id}
                   active={currentElement?.id === component.id}
+                  hidden={component.isHidden}
                 >
                   <BootstrapComponent
                     name={component.name}
@@ -54,10 +57,20 @@ const Editor: React.FC = () => {
           </Content>
         </Layout>
         <Sider width="300" style={{ background: 'white' }} className="settings-panel">
-          组件属性
-          {
-            currentElement && <PropsTable props={currentElement.props} />
-          }
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="属性设置" key="1">
+              {
+                currentElement ? <PropsTable props={currentElement.props} /> : (
+                  <Empty
+                    description={<p>该元素被锁定，无法编辑</p>}
+                  />
+                )
+              }
+            </TabPane>
+            <TabPane tab="图层设置" key="2">
+              <LayerList list={editor.components} selectedId={currentElement && currentElement.id} />
+            </TabPane>
+          </Tabs>
         </Sider>
       </Layout>
     </div>

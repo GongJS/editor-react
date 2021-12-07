@@ -12,6 +12,12 @@ export interface ComponentData {
   id: string;
   // 业务组件库名称 l-text，l-image 等等
   name: 'l-text' | 'l-image';
+  // 图层是否隐藏
+  isHidden?: boolean;
+  // 图层是否锁定
+  isLocked?: boolean;
+  // 图层名称
+  layerName?: string;
 }
 
 export interface EditorProps {
@@ -26,6 +32,7 @@ export const testComponents: ComponentData[] = [
   {
     id: uuidv4(),
     name: 'l-text',
+    layerName: '图层1',
     props: {
       text: 'hello', fontSize: '20px', color: '#000000', lineHeight: '1', textAlign: 'left', fontFamily: '',
     },
@@ -33,6 +40,7 @@ export const testComponents: ComponentData[] = [
   {
     id: uuidv4(),
     name: 'l-text',
+    layerName: '图层2',
     props: {
       text: 'hello2', fontSize: '10px', fontWeight: 'bold', lineHeight: '2', textAlign: 'left', fontFamily: '',
     },
@@ -40,9 +48,13 @@ export const testComponents: ComponentData[] = [
   {
     id: uuidv4(),
     name: 'l-text',
+    layerName: '图层3',
     props: {
       text: 'hello3', fontSize: '15px', actionType: 'url', url: 'https://www.baidu.com', lineHeight: '3', textAlign: 'left', fontFamily: '',
     },
+  },
+  {
+    id: uuidv4(), name: 'l-image', layerName: '图层4', props: { src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg', width: '100px' },
   },
 ];
 

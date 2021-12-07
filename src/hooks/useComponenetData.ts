@@ -6,11 +6,15 @@ const useComponentData = () => {
   const [editor, setEditor] = useRecoilState(editorData);
   const copyComponents = JSON.parse(JSON.stringify(editor.components));
   let currentElement = useRecoilValue(getCurrentElement);
-  const updateComponent = (key: keyof AllComponentProps, value: string) => {
+  const updateComponent = (key: keyof AllComponentProps, value: string, id?: string, isRoot?: boolean) => {
     if (!currentElement) return;
     currentElement = JSON.parse(JSON.stringify(currentElement));
     copyComponents.map((component: ComponentData) => {
-      if (component.id === currentElement?.id) {
+      if (isRoot) {
+        if (component.id === id) {
+          (component as any)[key] = value;
+        }
+      } else if (component.id === currentElement?.id) {
         component.props[key] = value;
       }
       return component;
@@ -28,9 +32,16 @@ const useComponentData = () => {
       components: newComponents,
     }));
   };
+  const selectComponent = (id: string) => {
+    setEditor({
+      ...editor,
+      currentElement: id,
+    });
+  };
   return {
     updateComponent,
     addComponent,
+    selectComponent,
   };
 };
 
