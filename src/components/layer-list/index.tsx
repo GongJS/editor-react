@@ -6,6 +6,7 @@ import {
 import { ComponentData } from '@/store/editor';
 import useComponentData from '@/hooks/useComponenetData';
 import './style.less';
+import InlineEdit from '@/components/inline-edit';
 
 interface LayerListProps {
   list: ComponentData[]
@@ -45,7 +46,7 @@ const LayerList: React.FC<LayerListProps> = ({ list, selectedId }) => {
                }
              </Button>
            </Tooltip>
-           <span>{item.layerName}</span>
+           <InlineEdit value={item.layerName || ''} id={item.id} />
          </li>
        ))
       }
