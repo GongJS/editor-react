@@ -38,10 +38,17 @@ const useComponentData = () => {
       currentElement: id,
     });
   };
+  const setComponentsData = (newComponents: ComponentData[]) => {
+    setEditor((oldEditor) => ({
+      ...oldEditor,
+      components: newComponents,
+    }));
+  };
   return {
     updateComponent,
     addComponent,
     selectComponent,
+    setComponentsData,
   };
 };
 

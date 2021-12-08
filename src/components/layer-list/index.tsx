@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tooltip, Button } from 'antd';
+import { arrayMoveImmutable } from 'array-move';
 import {
   EyeOutlined, EyeInvisibleOutlined, UnlockOutlined, LockOutlined,
 } from '@ant-design/icons';
 import { ComponentData } from '@/store/editor';
 import useComponentData from '@/hooks/useComponenetData';
-import './style.less';
 import InlineEdit from '@/components/inline-edit';
+import './style.less';
 
 interface LayerListProps {
   list: ComponentData[]
   selectedId: string | undefined
 }
 const LayerList: React.FC<LayerListProps> = ({ list, selectedId }) => {
-  const { updateComponent, selectComponent } = useComponentData();
+  const { updateComponent, selectComponent, setComponentsData } = useComponentData();
+  const [dragData, setDragData] = useState({
+    currentDragging: '',
+    currentIndex: -1,
+  });
   const handleClick = (id: string) => {
     selectComponent(id);
   };
@@ -21,16 +26,42 @@ const LayerList: React.FC<LayerListProps> = ({ list, selectedId }) => {
     e.stopPropagation();
     updateComponent(key as any, value, id, true);
   };
+  const onDragOver = (e: React.DragEvent<HTMLUListElement>) => {
+    e.preventDefault();
+  };
+  const onDragStart = (e: DragEvent, id: string, index: number) => {
+    setDragData(
+      {
+        currentDragging: id,
+        currentIndex: index,
+      },
+    );
+  };
+  const onDragEnter = (e: DragEvent, index: number) => {
+    if (index !== dragData.currentIndex) {
+      const newList = arrayMoveImmutable(list, dragData.currentIndex, index);
+      setDragData((data) => ({
+        ...data,
+        currentIndex: index,
+      }));
+      setComponentsData(newList);
+    }
+  };
   return (
     <ul
       className="ant-list-items ant-list-bordered"
+      onDragOver={onDragOver}
     >
       {
-       list.map((item) => (
+       list.map((item, index) => (
          <li
-           className={item.id === selectedId ? 'ant-list-item active' : 'ant-list-item'}
+           className={['ant-list-item', item.id === selectedId ? 'active' : null, dragData?.currentDragging === item.id ? 'ghost' : null].join(' ')}
            key={item.id}
            onClick={() => handleClick(item.id)}
+           onDragStart={(e) => onDragStart(e, item.id, index)}
+           onDragEnter={(e) => onDragEnter(e, index)}
+           draggable
+           data-index={index}
          >
            <Tooltip title={item.isHidden ? '显示' : '隐藏'}>
              <Button shape="circle" onClick={(e) => handleChange(e, 'isHidden', !item.isHidden, item.id)}>

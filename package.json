@@ -14,6 +14,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "antd": "^4.17.2",
+    "array-move": "^4.0.0",
     "axios": "^0.24.0",
     "cropperjs": "^1.5.11",
     "lodash-es": "^4.17.21",
