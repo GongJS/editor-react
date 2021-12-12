@@ -1,14 +1,15 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { cloneDeep } from 'lodash-es';
 import { AllComponentProps } from '@/defaultProps';
 import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
+import useDebounce from '@/hooks/useDebounce';
 
 const useComponentData = () => {
   const [editor, setEditor] = useRecoilState(editorData);
-  const copyComponents = JSON.parse(JSON.stringify(editor.components));
-  let currentElement = useRecoilValue(getCurrentElement);
-  const updateComponent = (key: keyof AllComponentProps, value: string, id?: string, isRoot?: boolean) => {
+  const copyComponents = cloneDeep(editor.components);
+  const currentElement = useRecoilValue(getCurrentElement);
+  const originUpdateComponent = (key: keyof AllComponentProps, value: string, id?: string, isRoot?: boolean) => {
     if (!currentElement) return;
-    currentElement = JSON.parse(JSON.stringify(currentElement));
     copyComponents.map((component: ComponentData) => {
       if (isRoot) {
         if (component.id === id) {
@@ -24,6 +25,7 @@ const useComponentData = () => {
       components: copyComponents,
     }));
   };
+  const updateComponent = useDebounce(originUpdateComponent, 20);
   const addComponent = (component: ComponentData) => {
     if (!component) return;
     const newComponents = [...editor.components, component];

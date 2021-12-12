@@ -1,16 +1,18 @@
 import React from 'react';
-import useComponentData from '@/hooks/useComponenetData';
 import './style.less';
 
-const ColorPicker: React.FC<{value: string}> = ({ value }) => {
+interface ColorPickerProps {
+  value: string,
+  onChange: (v: string) => any
+}
+const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }) => {
   const defaultColors = ['#ffffff', '#f5222d', '#fa541c', '#fadb14', '#52c41a', '#1890ff', '#722ed1', '#8c8c8c', '#000000', ''];
-  const { updateComponent } = useComponentData();
-  const updateColor = (color: string) => {
-    updateComponent('color', color);
+  const updateColor = (v: string) => {
+    onChange(v);
   };
   const handleClick = (e: React.MouseEvent<HTMLLIElement>, item: string) => {
     e.preventDefault();
-    updateColor(item);
+    onChange(item);
   };
   return (
     <div className="lego-color-picker">

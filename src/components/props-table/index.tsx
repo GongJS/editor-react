@@ -24,8 +24,11 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
     const newKey = key as keyof AllComponentProps;
     const item = mapPropsToForms[newKey];
     if (item) {
-      item.value = value;
-      result[newKey] = item;
+      const newItem: PropToForm = {
+        ...item,
+        value,
+      };
+      result[newKey] = newItem;
     }
     return result;
   }, {} as PropsToForms), [props]);
@@ -38,11 +41,11 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
       const Tag = componentMap[propsValue.component as keyof typeof componentMap] as React.FC<TagProps>;
       const SubTag = componentMap[propsValue.subComponent as keyof typeof componentMap] as React.FC<TagProps>;
       return (
-        <div className="prop-item" key={key}>
+        <div className={['prop-item', !propsValue.text ? 'no-text' : null].join(' ')} key={key} id={`item-${key}`}>
           {
             propsValue.text && <span className="label">{ propsValue.text }</span>
         }
-          <div className="prop-component">
+          <div className={`prop-component component-${propsValue.component}`}>
             <Tag
               value={propsValue.initialTransform ? propsValue.initialTransform(propsValue.value) : propsValue.value}
               {...propsValue.extraProps}

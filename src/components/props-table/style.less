@@ -4,13 +4,37 @@
     margin-bottom: 10px;
     align-items: center;
   }
+  .hide-item {
+    display: none;
+  }
   .label {
     width: 28%;
   }
-  .prop-component {
-    width: 70%;
+  .prop-item.no-text {
+    display: inline-block;
+    margin: 0 10px 0 0;
   }
-  .ant-slider {
-    width: 230px;
+  #item-fontWeight {
+    margin-left: 28%;
+  }
+  .prop-component {
+    // width: 70%;
+  }
+  .component-slider {
+    flex: 1
+  }
+  .component-select .ant-select {
+    width: 150px;
+  }
+  .prop-component.component-shadow-picker, .prop-component.component-image-processer, .prop-component.component-background-processer {
+    width: 100%;
+  }
+  #item-backgroundImage {
+    width: 100%;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  #item-backgroundImage .styled-upload-component .uploader-container {
+    min-height: 200px;
   }
 }

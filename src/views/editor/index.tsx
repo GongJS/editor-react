@@ -7,6 +7,7 @@ import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
 import LayerList from '@/components/layer-list';
+import EditGroup from '@/components/edit-group';
 import { textList } from '@/defaultTemplates';
 import './style.less';
 
@@ -60,7 +61,7 @@ const Editor: React.FC = () => {
           <Tabs defaultActiveKey="1">
             <TabPane tab="属性设置" key="1">
               {
-                currentElement ? <PropsTable props={currentElement.props} /> : (
+                currentElement && !currentElement.isLocked ? <EditGroup props={currentElement.props} /> : (
                   <Empty
                     description={<p>该元素被锁定，无法编辑</p>}
                   />
