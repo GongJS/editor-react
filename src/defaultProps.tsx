@@ -6,6 +6,7 @@ import ColorPicker from '@/components/color-picker';
 import ImageProcessor from '@/components/image-processor';
 import ShadowPicker from '@/components/shadow-picker';
 import IconSwitch from '@/components/icon-switch';
+import BackgroundProcessor from '@/components/background-processor';
 
 export interface CommonComponentProps {
   // actions
@@ -73,6 +74,18 @@ export interface TextComponentProps extends CommonComponentProps {
   backgroundColor: string;
 }
 export type AllComponentProps = TextComponentProps & ImageComponentProps
+export interface PageProps {
+  backgroundColor: string;
+  backgroundImage: string;
+  backgroundRepeat: string;
+  backgroundSize: string;
+  height: string;
+}
+export type AllFormProps = PageProps & AllComponentProps
+export interface PageData {
+  props: PageProps;
+  title: string;
+}
 export const imageDefaultProps: ImageComponentProps = {
   src: '',
   ...commonDefaultProps,
@@ -105,7 +118,7 @@ export interface PropToForm {
   initialTransform?: (v: any) => any;
 }
 export type PropsToForms = {
-  [P in keyof AllComponentProps]?: PropToForm
+  [P in keyof AllFormProps]?: PropToForm
 }
 const fontFamilyArr = [
   { text: '宋体', value: '"SimSun","STSong"' },
@@ -186,7 +199,7 @@ export const mapPropsToForms: PropsToForms = {
     ],
   },
   color: {
-    component: 'color',
+    component: 'color-picker',
     text: '字体颜色',
   },
   backgroundColor: {
@@ -291,6 +304,42 @@ export const mapPropsToForms: PropsToForms = {
     afterTransform: (e: any) => e.target.value,
     text: '链接',
   },
+  backgroundImage: {
+    component: 'background-processor',
+    initialTransform: (v: string) => {
+      if (v) {
+        const matches = v.match(/\((.*?)\)/);
+        if (matches && matches.length > 1) {
+          return matches[1].replace(/('|")/g, '');
+        }
+        return '';
+      }
+      return '';
+    },
+    afterTransform: (e: string) => (e ? `url('${e}')` : ''),
+    extraProps: { ratio: 8 / 15, showDelete: true },
+  },
+  backgroundSize: {
+    component: 'select',
+    subComponent: 'select-option',
+    text: '背景大小',
+    options: [
+      { value: 'contain', text: '自动缩放' },
+      { value: 'cover', text: '自动填充' },
+      { value: '', text: '默认' },
+    ],
+  },
+  backgroundRepeat: {
+    component: 'select',
+    subComponent: 'select-option',
+    text: '背景重复',
+    options: [
+      { value: 'no-repeat', text: '无重复' },
+      { value: 'repeat-x', text: 'X轴重复' },
+      { value: 'repeat-y', text: 'Y轴重复' },
+      { value: 'repeat', text: '全部重复' },
+    ],
+  },
 };
 
 export const componentMap = {
@@ -300,7 +349,6 @@ export const componentMap = {
   textarea: Input.TextArea,
   slider: Slider,
   select: Select,
-  color: ColorPicker,
   src: ImageProcessor,
   'radio-group': Radio.Group,
   'input-number': InputNumber,
@@ -309,4 +357,5 @@ export const componentMap = {
   'shadow-picker': ShadowPicker,
   'icon-switch': IconSwitch,
   'color-picker': ColorPicker,
+  'background-processor': BackgroundProcessor,
 };

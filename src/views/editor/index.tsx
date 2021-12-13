@@ -39,21 +39,23 @@ const Editor: React.FC = () => {
           <Content className="preview-container">
             <p>画布区域</p>
             <div className="preview-list" id="canvas-area">
-              {
-              editor.components.map((component) => (
-                <EditorWrapper
-                  key={component.id}
-                  id={component.id}
-                  active={currentElement?.id === component.id}
-                  hidden={component.isHidden}
-                >
-                  <BootstrapComponent
-                    name={component.name}
-                    props={component.props}
-                  />
-                </EditorWrapper>
-              ))
-            }
+              <div className="body-container" style={{ ...editor.pageData }}>
+                {
+                  editor.components.map((component) => (
+                    <EditorWrapper
+                      key={component.id}
+                      id={component.id}
+                      active={currentElement?.id === component.id}
+                      hidden={component.isHidden}
+                    >
+                      <BootstrapComponent
+                        name={component.name}
+                        props={component.props}
+                      />
+                    </EditorWrapper>
+                  ))
+                }
+              </div>
             </div>
           </Content>
         </Layout>
@@ -70,6 +72,9 @@ const Editor: React.FC = () => {
             </TabPane>
             <TabPane tab="图层设置" key="2">
               <LayerList list={editor.components} selectedId={currentElement && currentElement.id} />
+            </TabPane>
+            <TabPane tab="页面设置设置" key="3">
+              <PropsTable props={editor.pageData} type="page" />
             </TabPane>
           </Tabs>
         </Sider>

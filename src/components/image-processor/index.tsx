@@ -4,12 +4,12 @@ import { DeleteOutlined, ScissorOutlined } from '@ant-design/icons';
 import Cropper from 'cropperjs';
 import StyledUploader from '@/components/styled-uploader';
 import { UploadResp } from '@/extraType';
-import useComponentData from '@/hooks/useComponenetData';
 import './style.less';
 
 interface ImageProcessorProps {
   value: string
   showDelete?: boolean
+  onChange: (v: string) => any
 }
 interface CropDataProps {
   x: number;
@@ -17,17 +17,19 @@ interface CropDataProps {
   width: number;
   height: number;
 }
-const ImageProcessor: React.FC<ImageProcessorProps> = ({ value, showDelete }) => {
-  const { updateComponent } = useComponentData();
+const ImageProcessor: React.FC<ImageProcessorProps> = ({
+  onChange,
+  value, showDelete,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const cropperImg = useRef<HTMLImageElement | null>(null);
   let cropper: Cropper;
   let cropData: CropDataProps | null = null;
   const handleDelete = () => {
-    updateComponent('src', '');
+    onChange('');
   };
   const handleFileUploaded = (data: UploadResp) => {
-    updateComponent('src', data.data.urls[0]);
+    onChange(data.data.urls[0]);
   };
   const handleOk = () => {
     if (cropData) {
@@ -35,7 +37,7 @@ const ImageProcessor: React.FC<ImageProcessorProps> = ({ value, showDelete }) =>
         x, y, width, height,
       } = cropData;
       const cropperURL = `${value}?x-oss-process=image/crop,x_${x},y_${y},w_${width},h_${height}`;
-      updateComponent('src', cropperURL);
+      onChange(cropperURL);
     }
     setShowModal(false);
   };

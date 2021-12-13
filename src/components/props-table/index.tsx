@@ -8,17 +8,22 @@ import './style.less';
 
 interface PropsTableProps {
   props: Partial<AllComponentProps>
+  type?: 'component' | 'page'
 }
 interface TagProps {
   value: string
   onChange?: (e: any) => void
 }
 
-const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
-  const { updateComponent } = useComponentData();
+const PropsTable: React.FC<PropsTableProps> = ({ props, type }) => {
+  const { updateComponent, updatePageData } = useComponentData();
   const handleChange = (v: any, k: keyof AllComponentProps, propsValue: PropToForm) => {
     const value = propsValue.afterTransform ? propsValue.afterTransform(v) : v;
-    updateComponent(k, value);
+    if (type === 'page') {
+      updatePageData(k, value);
+    } else {
+      updateComponent(k, value);
+    }
   };
   const finalProps = useMemo(() => reduce(props, (result, value, key) => {
     const newKey = key as keyof AllComponentProps;
@@ -52,7 +57,8 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
               onChange={(value: any) => handleChange(value, key, propsValue)}
             >
               {
-              propsValue.options && propsValue.options.map((option, index) => <SubTag value={option.value} key={index}>{option.text}</SubTag>)
+              propsValue.options
+              && propsValue.options.map((option, index) => <SubTag value={option.value} key={index}>{option.text}</SubTag>)
             }
             </Tag>
           </div>
@@ -64,4 +70,7 @@ const PropsTable: React.FC<PropsTableProps> = ({ props }) => {
   );
 };
 
+PropsTable.defaultProps = {
+  type: 'component',
+};
 export default PropsTable;
