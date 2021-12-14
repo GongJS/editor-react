@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { cloneDeep } from 'lodash-es';
-import { AllComponentProps, PageProps } from '@/defaultProps';
+import { PageProps } from '@/defaultProps';
 import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
 import useDebounce from '@/hooks/useDebounce';
 
@@ -9,15 +9,15 @@ const useComponentData = () => {
   const copyComponents = cloneDeep(editor.components);
   const copyPageData = cloneDeep(editor.pageData);
   const currentElement = useRecoilValue(getCurrentElement);
-  const originUpdateComponent = (key: keyof AllComponentProps, value: string, id?: string, isRoot?: boolean) => {
+  const originUpdateComponent = (newValues:{ [p: string]: string}, id?: string, isRoot?: boolean) => {
     if (!currentElement) return;
     copyComponents.map((component: ComponentData) => {
       if (isRoot) {
         if (component.id === id) {
-          (component as any)[key] = value;
+          component = { ...component, ...newValues };
         }
       } else if (component.id === currentElement?.id) {
-        component.props[key] = value;
+        component.props = { ...component.props, ...newValues };
       }
       return component;
     });

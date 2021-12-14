@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { reduce } from 'lodash-es';
 import {
-  AllComponentProps, mapPropsToForms, PropToForm, componentMap, PropsToForms,
+  AllComponentProps, mapPropsToForms, PropToForm, componentMap, PropsToForms, PageProps,
 } from '@/defaultProps';
 import useComponentData from '@/hooks/useComponenetData';
 import './style.less';
@@ -17,12 +17,12 @@ interface TagProps {
 
 const PropsTable: React.FC<PropsTableProps> = ({ props, type }) => {
   const { updateComponent, updatePageData } = useComponentData();
-  const handleChange = (v: any, k: keyof AllComponentProps, propsValue: PropToForm) => {
+  const handleChange = (v: any, k: keyof AllComponentProps & keyof PageProps, propsValue: PropToForm) => {
     const value = propsValue.afterTransform ? propsValue.afterTransform(v) : v;
     if (type === 'page') {
       updatePageData(k, value);
     } else {
-      updateComponent(k, value);
+      updateComponent({ [k]: value });
     }
   };
   const finalProps = useMemo(() => reduce(props, (result, value, key) => {

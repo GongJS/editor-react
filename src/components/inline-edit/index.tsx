@@ -32,7 +32,7 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, id }) => {
     }
     if (isClickOutside && isEditing) {
       setIsEditing(false);
-      updateComponent('layerName', innerValue, id, true);
+      updateComponent({ layerName: innerValue }, id, true);
     }
     setIsClickOutside(false);
   }, [isClickOutside]);
@@ -55,7 +55,7 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, id }) => {
   useKeyPress('Enter', () => {
     if (isEditing) {
       setIsEditing(false);
-      updateComponent('layerName', innerValue, id, true);
+      updateComponent({ layerName: innerValue }, id, true);
     }
   });
   return (

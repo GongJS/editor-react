@@ -45,6 +45,7 @@ const Editor: React.FC = () => {
                       id={component.id}
                       active={currentElement?.id === component.id}
                       hidden={component.isHidden}
+                      props={component.props}
                     >
                       <BootstrapComponent
                         {...component}
