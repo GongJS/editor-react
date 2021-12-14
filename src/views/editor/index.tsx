@@ -8,7 +8,6 @@ import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
 import LayerList from '@/components/layer-list';
 import EditGroup from '@/components/edit-group';
-import { textList } from '@/defaultTemplates';
 import './style.less';
 
 const {
@@ -29,10 +28,9 @@ const Editor: React.FC = () => {
         </Header>
       </Layout>
       <Layout>
-        <Sider width="300" style={{ background: 'yellow' }}>
+        <Sider width="300" style={{ background: '#fff' }}>
           <div className="sidebar-container">
-            组件列表
-            <ComponentsList list={textList} />
+            <ComponentsList />
           </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
@@ -49,8 +47,7 @@ const Editor: React.FC = () => {
                       hidden={component.isHidden}
                     >
                       <BootstrapComponent
-                        name={component.name}
-                        props={component.props}
+                        {...component}
                       />
                     </EditorWrapper>
                   ))

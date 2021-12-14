@@ -61,6 +61,9 @@ export const commonDefaultProps: CommonComponentProps = {
 export interface ImageComponentProps extends CommonComponentProps {
   src: string;
 }
+export interface ShapeComponentProps extends CommonComponentProps {
+  backgroundColor: string;
+}
 export interface TextComponentProps extends CommonComponentProps {
   text: string;
   fontSize: string;
@@ -99,13 +102,18 @@ export const textDefaultProps: TextComponentProps = {
   fontStyle: 'normal',
   textDecoration: 'none',
   lineHeight: '1',
-  textAlign: 'left',
+  textAlign: 'center',
   color: '#000000',
+  backgroundColor: '',
+  ...commonDefaultProps,
+};
+export const shapeDefaultProps: ShapeComponentProps = {
   backgroundColor: '',
   ...commonDefaultProps,
 };
 export const textStylePropNames = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text');
 export const imageStylePropsNames = without(Object.keys(imageDefaultProps), 'src', 'actionType', 'url', 'text');
+export const shapeStylePropsNames = without(Object.keys(shapeDefaultProps), 'actionType', 'url', 'text');
 
 export interface PropToForm {
   component: string;

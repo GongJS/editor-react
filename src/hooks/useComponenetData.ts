@@ -7,7 +7,7 @@ import useDebounce from '@/hooks/useDebounce';
 const useComponentData = () => {
   const [editor, setEditor] = useRecoilState(editorData);
   const copyComponents = cloneDeep(editor.components);
-  const copyPagaData = cloneDeep(editor.pageData);
+  const copyPageData = cloneDeep(editor.pageData);
   const currentElement = useRecoilValue(getCurrentElement);
   const originUpdateComponent = (key: keyof AllComponentProps, value: string, id?: string, isRoot?: boolean) => {
     if (!currentElement) return;
@@ -48,10 +48,10 @@ const useComponentData = () => {
     }));
   };
   const updatePageData = (key: keyof PageProps, value: string) => {
-    copyPagaData[key] = value;
+    copyPageData[key] = value;
     setEditor((oldEditor) => ({
       ...oldEditor,
-      pageData: copyPagaData,
+      pageData: copyPageData,
     }));
   };
   return {

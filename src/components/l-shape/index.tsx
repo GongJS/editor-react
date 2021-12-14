@@ -1,23 +1,23 @@
 import React from 'react';
-import { imageStylePropsNames } from '@/defaultProps';
+import { shapeStylePropsNames } from '@/defaultProps';
 import { CreateComponentType } from '@/defaultTemplates';
 import useComponentCommon from '@/hooks/useComponentCommon';
 import './style.less';
 
-interface LImageProps extends CreateComponentType {
+interface LShapeProps extends CreateComponentType {
   style?: {[p: string]: any}
   className?: string
 }
 
-const LImage: React.FC<LImageProps> = ({ props, style, className }) => {
-  const { styleProps, handleClick } = useComponentCommon(props, imageStylePropsNames);
+const LShape: React.FC<LShapeProps> = ({ props, style, className }) => {
+  const { styleProps, handleClick } = useComponentCommon(props, shapeStylePropsNames);
   const onClick = (e: React.MouseEvent<HTMLImageElement>) => {
     e.preventDefault();
     handleClick();
   };
   return (
     <img
-      className={className ? `l-image-component ${className}` : 'l-image-component'}
+      className={className ? `l-shape-component ${className}` : 'l-shape-component'}
       style={{ ...styleProps, ...style }}
       onClick={onClick}
       src={props.src}
@@ -26,8 +26,8 @@ const LImage: React.FC<LImageProps> = ({ props, style, className }) => {
   );
 };
 
-LImage.defaultProps = {
+LShape.defaultProps = {
   style: {},
   className: '',
 };
-export default LImage;
+export default LShape;
