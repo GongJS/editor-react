@@ -17,6 +17,7 @@
     "array-move": "^4.0.0",
     "axios": "^0.24.0",
     "cropperjs": "^1.5.11",
+    "hotkeys-js": "^3.8.3",
     "lodash-es": "^4.17.21",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",

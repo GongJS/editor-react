@@ -45,6 +45,7 @@ const editorData = atom({
     components: testComponents,
     pageData: pageDefaultProps,
     currentElement: '',
+    copiedComponent: {} as ComponentData,
   },
 });
 
