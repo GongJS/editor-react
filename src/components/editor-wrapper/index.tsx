@@ -17,7 +17,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
   return (
     <div
       onClick={() => selectComponent(id)}
-      className={['editor-wrapper', active ? 'active' : null, hidden ? 'hidden' : null].join(' ')}
+      className={['edit-wrapper', active ? 'active' : null, hidden ? 'hidden' : null].filter((item) => !!item).join(' ')}
     >
       { children }
     </div>
