@@ -60,3 +60,18 @@ export const getImageDimensions = (url: string | File) => new Promise<{ width: n
     reject(new Error('There was some problem with the image.'));
   });
 });
+
+export const clickInsideElement = (e: Event, className: string) => {
+  let el = e.target as HTMLElement;
+  if (el.classList.contains(className)) {
+    return el;
+  }
+  while (el) {
+    if (el.classList && el.classList.contains(className)) {
+      return el;
+    }
+    el = el.parentNode as HTMLElement;
+  }
+
+  return false;
+};

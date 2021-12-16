@@ -108,7 +108,12 @@ const useComponentData = () => {
       currentElement: id,
     });
   };
-
+  const cancelComponent = () => {
+    setEditor({
+      ...editor,
+      currentElement: '',
+    });
+  };
   const copyComponent = () => {
     if (!currentElement) return;
     const copiedComponent = cloneDeep(currentElement);
@@ -181,6 +186,7 @@ const useComponentData = () => {
     updateComponent,
     addComponent,
     selectComponent,
+    cancelComponent,
     setComponentsData,
     copyComponent,
     pasteComponent,

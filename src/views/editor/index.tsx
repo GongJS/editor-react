@@ -9,6 +9,7 @@ import PropsTable from '@/components/props-table';
 import LayerList from '@/components/layer-list';
 import EditGroup from '@/components/edit-group';
 import HistoryArea from './history-area';
+import ContextMenu from '@/components/context-menu';
 import './style.less';
 
 const {
@@ -21,6 +22,7 @@ const Editor: React.FC = () => {
   const currentElement = useRecoilValue(getCurrentElement);
   return (
     <div className="editor" id="editor-layout-main">
+      <ContextMenu />
       <Layout style={{ background: '#fff' }}>
         <Header className="header">
           <div className="page-title" style={{ color: '#fff' }}>

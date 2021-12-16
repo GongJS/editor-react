@@ -159,6 +159,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
   return (
     <div
       ref={editWrapper}
+      data-component-id={id}
       onClick={() => selectComponent(id)}
       onMouseDown={(e) => startMove(e, id)}
       style={style as React.CSSProperties}
