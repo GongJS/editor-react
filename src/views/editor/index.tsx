@@ -62,7 +62,7 @@ const Editor: React.FC = () => {
           </Content>
         </Layout>
         <Sider width="300" style={{ background: 'white' }} className="settings-panel">
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" type="card">
             <TabPane tab="属性设置" key="1">
               {
                 currentElement && !currentElement.isLocked ? <EditGroup props={currentElement.props} /> : (
