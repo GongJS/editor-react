@@ -61,7 +61,7 @@ const useComponentData = () => {
     }
   };
 
-  const updateComponent = useDebounce(originUpdateComponent, 20);
+  const updateComponent = useDebounce(originUpdateComponent, 1);
 
   const addComponent = (component: ComponentData) => {
     if (!component) return;

@@ -32,13 +32,14 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
   let isMoving = false;
   useHotKeys();
   const editWrapper = useRef<null | HTMLDivElement>(null);
+  const moveWrapper = useRef<null | HTMLDivElement>(null);
   const { updateComponent } = useComponentData();
   const style = useMemo(() => pick(props, ['position', 'top', 'left', 'width', 'height']), [props]);
   const { selectComponent } = useComponentData();
   const caculateMovePosition = (e: MouseEvent) => {
     const container = document.getElementById('canvas-area') as HTMLElement;
     const left = e.clientX - gap.x - container.offsetLeft;
-    const top = e.clientY - gap.y - container.offsetTop;
+    const top = e.clientY - gap.y - container.offsetTop + container.scrollTop;
     return {
       left,
       top,
@@ -120,7 +121,9 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
     e.stopPropagation();
     selectComponent(currentId);
     const currentElement = editWrapper.current;
-    if (currentElement) {
+    const moveElement = moveWrapper.current;
+    const resizeElements = [currentElement, moveElement];
+    if (currentElement && moveElement) {
       const {
         left, right, top, bottom,
       } = currentElement.getBoundingClientRect();
@@ -128,17 +131,20 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
         const size = caculateSize(direction, e, {
           left, right, top, bottom,
         });
-        const { style } = currentElement;
-        if (size) {
-          style.width = `${size.width}px`;
-          style.height = `${size.height}px`;
-          if (size.left) {
-            style.left = `${size.left}px`;
+        updateComponent({ ...size });
+        resizeElements.forEach((element) => {
+          const { style } = element;
+          if (size) {
+            if (size.left) {
+              style.left = `${size.left}px`;
+            }
+            if (size.top) {
+              style.top = `${size.top}px`;
+            }
+            style.width = `${size.width}px`;
+            style.height = `${size.height}px`;
           }
-          if (size.top) {
-            style.top = `${size.top}px`;
-          }
-        }
+        });
       };
       const handleMouseUp = (e: MouseEvent) => {
         document.removeEventListener('mousemove', handleMove);
@@ -165,7 +171,9 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
       style={style as React.CSSProperties}
       className={['edit-wrapper', active ? 'active' : null, hidden ? 'hidden' : null].filter((item) => !!item).join(' ')}
     >
-      { children }
+      <div className="move-wrapper" ref={moveWrapper} onMouseDown={startMove}>
+        { children }
+      </div>
       <div className="resizers">
         <div className="resizer top-left" onMouseDown={(e) => startResize(e, id, 'top-left')} />
         <div className="resizer top-right" onMouseDown={(e) => startResize(e, id, 'top-right')} />
