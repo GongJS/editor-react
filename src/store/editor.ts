@@ -3,7 +3,7 @@ import {
   selector,
 } from 'recoil';
 import {
-  TextComponentProps, ImageComponentProps, PageData,
+  TextComponentProps, ImageComponentProps,
 } from '@/defaultProps';
 
 export interface ComponentData {
@@ -21,18 +21,34 @@ export interface ComponentData {
   layerName?: string;
 }
 
+export interface PageData {
+  [key: string]: any ;
+  setting?: { [key: string]: any };
+  id?: number;
+  title?: string;
+  desc?: string;
+  coverImg?: string;
+  uuid?: string;
+}
+interface HistoryComponentProps {
+  past: ComponentData[][],
+  present: ComponentData[],
+  future: ComponentData[][]
+}
 export interface EditorProps {
   // 供中间编辑器渲染的数组
   components: ComponentData[];
   // 当前编辑的是哪个元素，uuid
   currentElement: string;
   // 页面信息
-  page: PageData;
+  pageData: PageData;
+  // 复制组件
+  copiedComponent: ComponentData,
 }
 
 export const testComponents: ComponentData[] = [];
 
-const pageDefaultProps = {
+const defaultPageData = {
   backgroundColor: '#ffffff',
   backgroundImage: 'url("https://static.imooc-lego.com/upload-files/%E5%B9%BC%E5%84%BF%E5%9B%AD%E8%83%8C%E6%99%AF%E5%9B%BE-994372.jpg")',
   backgroundRepeat: 'no-repeat',
@@ -43,10 +59,19 @@ const editorData = atom({
   key: 'editorData',
   default: {
     components: testComponents,
-    pageData: pageDefaultProps,
+    pageData: defaultPageData,
     currentElement: '',
     copiedComponent: {} as ComponentData,
-  },
+  } as EditorProps,
+});
+
+export const historyComponentsData = atom({
+  key: 'historyComponents',
+  default: {
+    past: [],
+    present: [],
+    future: [],
+  } as HistoryComponentProps,
 });
 
 export const getCurrentElement = selector({

@@ -8,6 +8,7 @@ import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
 import LayerList from '@/components/layer-list';
 import EditGroup from '@/components/edit-group';
+import HistoryArea from './history-area';
 import './style.less';
 
 const {
@@ -36,6 +37,7 @@ const Editor: React.FC = () => {
         <Layout style={{ padding: '0 24px 24px' }}>
           <Content className="preview-container">
             <p>画布区域</p>
+            <HistoryArea />
             <div className="preview-list" id="canvas-area">
               <div className="body-container" style={{ ...editor.pageData }}>
                 {

@@ -2,16 +2,40 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep } from 'lodash-es';
+import { useEffect, useState } from 'react';
 import { PageProps } from '@/defaultProps';
-import editorData, { ComponentData, getCurrentElement } from '@/store/editor';
+import editorData, { ComponentData, getCurrentElement, historyComponentsData } from '@/store/editor';
 import useDebounce from '@/hooks/useDebounce';
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
 const useComponentData = () => {
   const [editor, setEditor] = useRecoilState(editorData);
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+  const [historyComponents, setHistoryComponents] = useRecoilState(historyComponentsData);
   const copyComponents = cloneDeep(editor.components);
   const copyPageData = cloneDeep(editor.pageData);
   const currentElement = useRecoilValue(getCurrentElement);
+  useEffect(() => {
+    if (historyComponents.past.length > 0) {
+      setCanUndo(true);
+    } else {
+      setCanUndo(false);
+    }
+    if (historyComponents.future.length > 0) {
+      setCanRedo(true);
+    } else {
+      setCanRedo(false);
+    }
+  }, [historyComponents.past, historyComponents.future]);
+
+  const setComponentsData = (newComponents: ComponentData[]) => {
+    setEditor((oldEditor) => ({
+      ...oldEditor,
+      components: newComponents,
+    }));
+  };
+
   const originUpdateComponent = (newValues:{ [p: string]: string}, id?: string, isRoot?: boolean) => {
     if (!currentElement) return;
     copyComponents.map((component: ComponentData) => {
@@ -28,8 +52,17 @@ const useComponentData = () => {
       ...oldEditor,
       components: copyComponents,
     }));
+    if (!isRoot) {
+      setHistoryComponents((old) => ({
+        past: [...old.past, old.present],
+        present: copyComponents,
+        future: [],
+      }));
+    }
   };
+
   const updateComponent = useDebounce(originUpdateComponent, 20);
+
   const addComponent = (component: ComponentData) => {
     if (!component) return;
     component.layerName = `图层${editor.components.length + 1}`;
@@ -38,19 +71,44 @@ const useComponentData = () => {
       ...oldEditor,
       components: newComponents,
     }));
+    setHistoryComponents((old) => ({
+      past: [...old.past, old.present],
+      present: newComponents,
+      future: [],
+    }));
   };
+
+  const undoComponent = () => {
+    if (historyComponents.past.length === 0) return;
+    const previous = historyComponents.past[historyComponents.past.length - 1];
+    const newPast = historyComponents.past.slice(0, historyComponents.past.length - 1);
+    setHistoryComponents({
+      past: newPast,
+      present: previous,
+      future: [historyComponents.present, ...historyComponents.future],
+    });
+    setComponentsData(previous);
+  };
+
+  const redoComponent = () => {
+    if (historyComponents.future.length === 0) return;
+    const next = historyComponents.future[0];
+    const newFuture = historyComponents.future.slice(1);
+    setHistoryComponents((old) => ({
+      past: [...old.past, old.present],
+      present: next,
+      future: newFuture,
+    }));
+    setComponentsData(next);
+  };
+
   const selectComponent = (id: string) => {
     setEditor({
       ...editor,
       currentElement: id,
     });
   };
-  const setComponentsData = (newComponents: ComponentData[]) => {
-    setEditor((oldEditor) => ({
-      ...oldEditor,
-      components: newComponents,
-    }));
-  };
+
   const copyComponent = () => {
     if (!currentElement) return;
     const copiedComponent = cloneDeep(currentElement);
@@ -59,6 +117,7 @@ const useComponentData = () => {
       copiedComponent,
     }));
   };
+
   const pasteComponent = () => {
     if (editor.copiedComponent.id) {
       const clone = cloneDeep(editor.copiedComponent);
@@ -72,11 +131,13 @@ const useComponentData = () => {
       message.success('已黏贴当前图层', 1);
     }
   };
+
   const deleteComponent = () => {
     if (!currentElement) return;
     const components = editor.components.filter((component) => component.id !== currentElement.id);
     setComponentsData(components);
   };
+
   const moveComponent = (data: { direction: MoveDirection; amount: number }) => {
     if (!currentElement) return;
     const oldTop = parseInt(currentElement.props.top || '0', 10);
@@ -108,6 +169,7 @@ const useComponentData = () => {
         break;
     }
   };
+
   const updatePageData = (key: keyof PageProps, value: string) => {
     copyPageData[key] = value;
     setEditor((oldEditor) => ({
@@ -125,6 +187,10 @@ const useComponentData = () => {
     deleteComponent,
     moveComponent,
     updatePageData,
+    undoComponent,
+    redoComponent,
+    canRedo,
+    canUndo,
   };
 };
 

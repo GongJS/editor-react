@@ -1,8 +1,27 @@
 .editor {
+  .header {
+    display: flex;
+    justify-content: space-between;
+  }
+  .header .logo-img {
+    margin-right: 20px;
+    height: 40px;
+  }
+  .page-title {
+    display: flex;
+  }
+  .header h4 {
+    color: #ffffff;
+  }
+  .editor-spinner {
+    position: fixed;
+    right: 50%;
+    top: 10px;
+  }
   .preview-container {
     padding: 24px;
     margin: 0;
-    min-height: 85vh;
+    min-height: 90vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,6 +29,7 @@
   }
   .preview-list {
     padding: 0;
+    margin: 0;
     min-width: 375px;
     min-height: 200px;
     border: 1px solid #efefef;
@@ -17,7 +37,46 @@
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
-    margin: 50px 0 0;
+    margin-top: 50px;
     max-height: 80vh;
+  }
+  .preview-list.active {
+    border: 1px solid #1890ff;
+  }
+  .preview-list.canvas-fix .l-text-component,
+  .preview-list.canvas-fix .l-image-component,
+  .preview-list.canvas-fix .l-shape-component {
+    box-shadow: none !important;
+  }
+  .preview-list.canvas-fix {
+    position: absolute;
+    max-height: none;
+  }
+  .sidebar-container {
+    padding: 20px;
+  }
+  .body-container {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+  }
+  .page-settings {
+    padding: 16px;
+  }
+  .settings-panel .ant-tabs-top-content {
+    max-height: calc(100vh - 68px - 56px);
+    overflow-y: auto;
+  }
+  .final-preview {
+    position: absolute;
+    width: calc(100% - 400px);
+    height: 100%;
+    background: transparent;
+    top: 0;
+    left: 0;
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
