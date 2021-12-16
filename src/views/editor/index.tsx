@@ -11,6 +11,7 @@ import EditGroup from '@/components/edit-group';
 import HistoryArea from './history-area';
 import ContextMenu from '@/components/context-menu';
 import './style.less';
+import useComponentData from '@/hooks/useComponenetData';
 
 const {
   Header, Content, Sider,
@@ -20,6 +21,13 @@ const { TabPane } = Tabs;
 const Editor: React.FC = () => {
   const editor = useRecoilValue(editorData);
   const currentElement = useRecoilValue(getCurrentElement);
+  const { cancelComponent } = useComponentData();
+  const clearSelection = (e: Event) => {
+    const currentTarget = e.target as HTMLElement;
+    if (currentTarget.classList.contains('preview-container')) {
+      cancelComponent();
+    }
+  };
   return (
     <div className="editor" id="editor-layout-main">
       <ContextMenu />
@@ -37,7 +45,7 @@ const Editor: React.FC = () => {
           </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          <Content className="preview-container">
+          <Content className="preview-container" onMouseDown={clearSelection}>
             <p>画布区域</p>
             <HistoryArea />
             <div className="preview-list" id="canvas-area">
