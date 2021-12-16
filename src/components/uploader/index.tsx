@@ -158,7 +158,7 @@ const Uploader: React.FC<UploaderProps> = ({
   };
   return (
     <div className="file-upload">
-      <div className={`upload-area ${drag && isDragOver ? 'is-dragover' : null}`} {...events}>
+      <div className={`upload-area ${drag && isDragOver ? 'is-dragover' : ''}`} {...events}>
         {
           isUploading
             ? (loadingSlot || <button type="button" className="btn btn-primary" disabled>正在上传...</button>)

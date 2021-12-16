@@ -92,15 +92,17 @@ const ComponentsList: React.FC = () => {
           key="2"
         >
           <StyledUploader onSuccess={addImageComponent} />
-          {
-            imageList.map((component, index) => (
-              <div key={index} onClick={() => addTextComponent(component)} className="component-item item-image">
-                <div className="component-wrapper">
-                  <LImage {...component} style={generateResetCss('l-image')} className="inside-component" />
+          <div className="image-list">
+            {
+              imageList.map((component, index) => (
+                <div key={index} onClick={() => addTextComponent(component)} className="component-item item-image">
+                  <div className="component-wrapper">
+                    <LImage {...component} style={generateResetCss('l-image')} className="inside-component" />
+                  </div>
                 </div>
-              </div>
-            ))
-          }
+              ))
+            }
+          </div>
         </TabPane>
         <TabPane
           tab={(

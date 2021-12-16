@@ -133,10 +133,6 @@ const defaultImgTemplates = [
   },
   {
     ...commonDefaultProps,
-    src: 'http://static.imooc-lego.com/upload-files/money-664239',
-  },
-  {
-    ...commonDefaultProps,
     src: 'http://static.imooc-lego.com/upload-files/bag-904186.png',
   },
   {
