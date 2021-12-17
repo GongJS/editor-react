@@ -75,3 +75,6 @@ export const clickInsideElement = (e: Event, className: string) => {
 
   return false;
 };
+export const isMobile = (mobile: string) => {
+  return /^1[3-9]\d{9}$/.test(mobile)
+}
