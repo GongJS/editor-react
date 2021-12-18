@@ -40,11 +40,7 @@
   display: block;
   font-size: 19px;
 }
-.aside, .login-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 .login-area h2 {
   color: #333333;
   font-size: 29px;
@@ -53,9 +49,10 @@
   color: #666666;
   font-size: 19px;
 }
-.login-area .form-wrapper {
-  display: flex;
-  align-items: center;
+.login-area {
+  .ant-form-item-explain-error {
+    display: flex;
+  }
   .ant-btn-primary {
     margin-right: 20px;
   }

@@ -1,49 +1,32 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Button, Dropdown, Menu, message,
+  Button, Dropdown, Menu,
 } from 'antd';
 
-import {
-  useRecoilState,
-} from 'recoil';
-import Store, { UserProps } from '@/store';
+import { useRecoilValue } from 'recoil';
+import useUser from '@/hooks/useUser';
+import userData from '@/store/user';
 import './style.less';
 
-interface UserProfileProps {
-  user: UserProps
-}
-const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
-  const [store, setStore] = useRecoilState(Store);
+const UserProfile: React.FC = () => {
+  const user = useRecoilValue(userData);
+  const { logout } = useUser();
   const navigate = useNavigate();
-  const oldUserName = store.user.userName;
-  const login = () => {
-    const newStore = {
-      ...store,
-      user: {
-        isLogin: true,
-        userName: oldUserName,
-      },
-    };
-    setStore(newStore);
-  };
-  const logOut = () => {
-    const newStore = {
-      ...store,
-      user: {
-        isLogin: false,
-        userName: oldUserName,
-      },
-    };
-    setStore(newStore);
-    message.success('退出登录成功，2秒后跳转到首页', 2);
-    setTimeout(() => {
-      navigate('/');
-    }, 2000);
+  const createDesign = () => {
+    if (user.isLogin) {
+      const payload = {
+        title: '未命名作品',
+        desc: '未命名作品',
+        coverImg: 'http://typescript-vue.oss-cn-beijing.aliyuncs.com/vue-marker/5f81cca3f3bf7a0e1ebaf885.png',
+      };
+    } else {
+      navigate('/login');
+    }
   };
   const menu = (
     <Menu>
-      <Menu.Item onClick={logOut}>
+      <Menu.Item onClick={logout}>
         登出
       </Menu.Item>
     </Menu>
@@ -51,25 +34,26 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   return (
     <div className="user-profile">
       {
-        store.user.isLogin
-          ? (
-            <div>
-              <Dropdown overlay={menu} className="user-profile-component">
-                <Link to="/setting">{user.userName}</Link>
-              </Dropdown>
-            </div>
-          )
-          : (
-            <Button
-              type="primary"
-              className="user-profile-component"
-              onClick={login}
-            >
-              登录
-            </Button>
-          )
+        !user.isLogin && (
+        <Button
+          type="primary"
+          onClick={() => navigate('/login')}
+        >
+          登录
+        </Button>
+        )
       }
-
+      <div className="user-operation">
+        <Button type="primary" onClick={createDesign}>
+          创建设计
+        </Button>
+        <Button type="primary">
+          <Link to="/mywork">我的作品</Link>
+        </Button>
+        <Dropdown overlay={menu}>
+          <Link to="/setting">{user.data.nickName}</Link>
+        </Dropdown>
+      </div>
     </div>
   );
 };
