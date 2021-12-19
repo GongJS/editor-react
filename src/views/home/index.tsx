@@ -3,10 +3,13 @@ import { Layout } from 'antd';
 import {
   useRecoilValue,
 } from 'recoil';
+import { Link } from 'react-router-dom';
 import Store from '@/store';
 import TemplateList from '@/components/template-list';
 import UserProfile from '@/components/user-profile';
+
 import './style.less';
+import logo from '@/assets/logo-simple.png';
 
 const {
   Header, Footer, Content,
@@ -19,6 +22,9 @@ const Home: React.FC = () => {
       <Layout style={{ background: '#fff' }}>
         <Header className="header">
           <div className="page-title">
+            <Link to="/">
+              <img alt="logo" src={logo} className="logo-img" />
+            </Link>
             乐高
           </div>
           <UserProfile user={store.user} />

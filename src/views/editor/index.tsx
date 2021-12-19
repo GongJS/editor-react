@@ -1,17 +1,23 @@
 import React from 'react';
-import { Layout, Tabs, Empty } from 'antd';
+import {
+  Layout, Tabs, Empty, Button, Dropdown, Menu,
+} from 'antd';
 import { useRecoilValue } from 'recoil';
+import { Link } from 'react-router-dom';
 import editorData, { getCurrentElement } from '@/store/editor';
+import userData from '@/store/user';
+import useUser from '@/hooks/useUser';
+import useComponentData from '@/hooks/useComponenetData';
 import BootstrapComponent from '@/components/bootstrap-component';
 import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
 import LayerList from '@/components/layer-list';
 import EditGroup from '@/components/edit-group';
-import HistoryArea from './history-area';
 import ContextMenu from '@/components/context-menu';
+import logo from '@/assets/logo-simple.png';
+import HistoryArea from './history-area';
 import './style.less';
-import useComponentData from '@/hooks/useComponenetData';
 
 const {
   Header, Content, Sider,
@@ -21,6 +27,8 @@ const { TabPane } = Tabs;
 const Editor: React.FC = () => {
   const editor = useRecoilValue(editorData);
   const currentElement = useRecoilValue(getCurrentElement);
+  const user = useRecoilValue(userData);
+  const { logout } = useUser();
   const { cancelComponent } = useComponentData();
   const clearSelection = (e: Event) => {
     const currentTarget = e.target as HTMLElement;
@@ -28,13 +36,40 @@ const Editor: React.FC = () => {
       cancelComponent();
     }
   };
+  const menu = (
+    <Menu>
+      <Menu.Item onClick={logout}>
+        <Link to="/mywork">我的作品</Link>
+      </Menu.Item>
+      <Menu.Item onClick={logout}>
+        登出
+      </Menu.Item>
+    </Menu>
+  );
   return (
     <div className="editor" id="editor-layout-main">
       <ContextMenu />
       <Layout style={{ background: '#fff' }}>
         <Header className="header">
           <div className="page-title" style={{ color: '#fff' }}>
+            <Link to="/">
+              <img alt="logo" src={logo} className="logo-img" />
+            </Link>
             乐高
+          </div>
+          <div className="user-operation">
+            <Button type="primary" shape="round">
+              预览和设置
+            </Button>
+            <Button type="primary" shape="round">
+              保存
+            </Button>
+            <Button type="primary" shape="round">
+              发布
+            </Button>
+            <Dropdown.Button overlay={menu}>
+              {user.data.nickName}
+            </Dropdown.Button>
           </div>
         </Header>
       </Layout>
@@ -83,7 +118,7 @@ const Editor: React.FC = () => {
             <TabPane tab="图层设置" key="2">
               <LayerList list={editor.components} selectedId={currentElement && currentElement.id} />
             </TabPane>
-            <TabPane tab="页面设置设置" key="3">
+            <TabPane tab="页面设置" key="3">
               <PropsTable props={editor.pageData} type="page" />
             </TabPane>
           </Tabs>

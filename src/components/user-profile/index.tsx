@@ -44,15 +44,15 @@ const UserProfile: React.FC = () => {
         )
       }
       <div className="user-operation">
-        <Button type="primary" onClick={createDesign}>
+        <Button type="primary" shape="round" onClick={createDesign}>
           创建设计
         </Button>
-        <Button type="primary">
+        <Button type="primary" shape="round">
           <Link to="/mywork">我的作品</Link>
         </Button>
-        <Dropdown overlay={menu}>
+        <Dropdown.Button overlay={menu}>
           <Link to="/setting">{user.data.nickName}</Link>
-        </Dropdown>
+        </Dropdown.Button>
       </div>
     </div>
   );
