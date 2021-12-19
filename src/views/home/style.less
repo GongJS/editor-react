@@ -1,4 +1,9 @@
 .homepage-container {
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .page-title {
     color: #fff;
   }
@@ -9,10 +14,40 @@
     max-width: 1200px;
     margin: 50px auto;
     width: 100%;
+    .hot-title {
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+    .hot-title p {
+      text-align: center;
+      font-size: 16px;
+      color: #666;
+    }
+    .hot-template {
+      font-size: 22px;
+      color: #333;
+    }
+    .hot-template::before, .hot-template::after {
+      content: "";
+      display: inline-block;
+      width: 57px;
+      height: 1px;
+      margin: 0 26px;
+      background-color: #d8d8d8;
+      vertical-align: middle;
+    }
   }
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .my-works {
+    background: #fff;
+    padding: 0 24px 24px 30px;
+    min-height: 85vh;
+    max-width: 1200px;
+    margin: 50px auto;
+    width: 100%;
+    .content-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
