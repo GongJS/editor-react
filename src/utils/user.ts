@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query';
-import {http, useHttp} from '@/hooks/useHttp';
+import { http, useHttp } from '@/hooks/useHttp';
 import { LoginByPhoneNumberProps } from '@/views/login';
 
 export const useUserLogin = () => {
@@ -12,5 +12,5 @@ export const useUserLogin = () => {
 
 export const getUserInfo = async (token: string) => {
   const userInfo = await http('users/getUserInfo', { token });
-  return userInfo.data
+  return userInfo.data;
 };

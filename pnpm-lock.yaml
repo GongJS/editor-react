@@ -32,6 +32,7 @@ specifiers:
   lodash-es: ^4.17.21
   prettier: 2.5.0
   qs: ^6.10.2
+  qs-stringify: ^1.2.1
   react: ^17.0.0
   react-dom: ^17.0.0
   react-query: ^3.34.5
@@ -51,6 +52,7 @@ dependencies:
   hotkeys-js: 3.8.7
   lodash-es: 4.17.21
   qs: 6.10.2
+  qs-stringify: 1.2.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-query: 3.34.5_react-dom@17.0.2+react@17.0.2
@@ -3177,6 +3179,10 @@ packages:
     resolution: {integrity: sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=}
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     dev: true
+
+  /qs-stringify/1.2.1:
+    resolution: {integrity: sha512-2N5xGLGZUxpgAYq1fD1LmBSCbxQVsXYt5JU0nU3FuPWO8PlCnKNFQwXkZgyB6mrTdg7IbexX4wxIR403dJw9pw==}
+    dev: false
 
   /qs/6.10.2:
     resolution: {integrity: sha512-mSIdjzqznWgfd4pMii7sHtaYF8rx8861hBO80SraY5GT0XQibWZWJSid0avzHGkDIZLImux2S5mXO0Hfct2QCw==}
