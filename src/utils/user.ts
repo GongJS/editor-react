@@ -10,7 +10,4 @@ export const useUserLogin = () => {
   }));
 };
 
-export const getUserInfo = async (token: string) => {
-  const userInfo = await http('users/getUserInfo', { token });
-  return userInfo.data;
-};
+export const getUserInfo = async (token: string) => await http('users/getUserInfo', { token });

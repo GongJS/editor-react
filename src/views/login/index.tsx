@@ -6,7 +6,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { isMobile } from '@/helper';
-import { useHttp, http } from '@/hooks/useHttp';
+import { useHttp } from '@/hooks/useHttp';
 import useUser from '@/hooks/useUser';
 import { useUserLogin, getUserInfo } from '@/utils/user';
 import Logo2 from '@/assets/logo2.png';
@@ -46,17 +46,21 @@ const Login: React.FC = () => {
     const res = await userLogin(values);
     if (res.errno === 0) {
       const userInfo = await getUserInfo(res.data.token);
-      setUserData({
-        token: res.data.token,
-        isLogin: true,
-        data: {
-          ...userInfo,
-        },
-      });
-      message.success('登录成功 2秒后跳转首页');
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      if (userInfo.errno === 0) {
+        setUserData({
+          token: res.data.token,
+          isLogin: true,
+          data: {
+            ...userInfo.data,
+          },
+        });
+        message.success('登录成功 2秒后跳转首页');
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      } else {
+        message.success(userInfo.message);
+      }
     } else {
       message.error(res.message);
     }

@@ -14,14 +14,14 @@ const useUser = () => {
     localStorage.setItem('token', data.token);
   };
 
-  const logout = () => {
+  const logout = (msg?: string) => {
     setUser({
       isLogin: false,
       token: '',
       data: {},
     });
     localStorage.removeItem('token', '');
-    message.success('退出登录成功，2秒后跳转到首页', 2);
+    message.success(msg || '退出登录成功，2秒后跳转到首页', 2);
     setTimeout(() => {
       navigate('/');
     }, 2000);

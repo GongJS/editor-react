@@ -34,7 +34,7 @@ const RequireAuth = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
-  const { setUserData } = useUser();
+  const { setUserData, logout } = useUser();
   const user = useRecoilValue(userData);
   const wrapperRequireAuth = (Component: React.FC) => (
     <RequireAuth>
@@ -44,13 +44,17 @@ function App() {
   useEffect(() => {
     if (user.token) {
       getUserInfo(user.token).then((res) => {
-        setUserData({
-          token: user.token,
-          isLogin: true,
-          data: {
-            ...res,
-          },
-        });
+        if (res.errno === 0) {
+          setUserData({
+            token: user.token,
+            isLogin: true,
+            data: {
+              ...res.data,
+            },
+          });
+        } else {
+          logout(res.message);
+        }
       });
     }
   }, []);
