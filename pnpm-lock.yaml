@@ -27,12 +27,12 @@ specifiers:
   eslint-plugin-react-hooks: ^4.3.0
   hotkeys-js: ^3.8.3
   husky: ^7.0.4
+  lego-bricks-react: ^0.0.1
   less: ^4.1.2
   lint-staged: ^12.1.2
   lodash-es: ^4.17.21
   prettier: 2.5.0
   qs: ^6.10.2
-  qs-stringify: ^1.2.1
   react: ^17.0.0
   react-dom: ^17.0.0
   react-query: ^3.34.5
@@ -50,9 +50,9 @@ dependencies:
   axios: 0.24.0
   cropperjs: 1.5.12
   hotkeys-js: 3.8.7
+  lego-bricks-react: 0.0.1_react-dom@17.0.2
   lodash-es: 4.17.21
   qs: 6.10.2
-  qs-stringify: 1.2.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-query: 3.34.5_react-dom@17.0.2+react@17.0.2
@@ -2593,6 +2593,17 @@ packages:
       language-subtag-registry: 0.3.21
     dev: true
 
+  /lego-bricks-react/0.0.1_react-dom@17.0.2:
+    resolution: {integrity: sha512-SxeeWvEkgcvdSmnGmcoE42rc0GVrYRqkMeiib17SmMa/jNwM5/5fHj536lgWOWpBQvolTlXnJzxcHOc0cagAvw==}
+    peerDependencies:
+      react-dom: ^17.0.2
+    dependencies:
+      antd: 4.17.2_react-dom@17.0.2+react@17.0.2
+      lodash-es: 4.17.21
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: false
+
   /less/4.1.2:
     resolution: {integrity: sha512-EoQp/Et7OSOVu0aJknJOtlXZsnr8XE8KwuzTHOLeVSEx8pVWUICc8Q0VYRHgzyjX78nMEyC/oztWFbgyhtNfDA==}
     engines: {node: '>=6'}
@@ -3179,10 +3190,6 @@ packages:
     resolution: {integrity: sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=}
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     dev: true
-
-  /qs-stringify/1.2.1:
-    resolution: {integrity: sha512-2N5xGLGZUxpgAYq1fD1LmBSCbxQVsXYt5JU0nU3FuPWO8PlCnKNFQwXkZgyB6mrTdg7IbexX4wxIR403dJw9pw==}
-    dev: false
 
   /qs/6.10.2:
     resolution: {integrity: sha512-mSIdjzqznWgfd4pMii7sHtaYF8rx8861hBO80SraY5GT0XQibWZWJSid0avzHGkDIZLImux2S5mXO0Hfct2QCw==}

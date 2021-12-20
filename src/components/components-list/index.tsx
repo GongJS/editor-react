@@ -2,6 +2,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { BuildOutlined, FieldStringOutlined, FileImageOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
+import { LImage, LText, LShape } from 'lego-bricks-react';
 import StyledUploader from '@/components/styled-uploader';
 import {
   textList, CreateComponentType, imageList, shapeList,
@@ -11,9 +12,6 @@ import { getImageDimensions } from '@/helper';
 import { commonComponentDefaultData } from '@/defaultProps';
 import { UploadResp } from '@/extraType';
 import useComponentData from '@/hooks/useComponenetData';
-import LText from '@/components/l-text';
-import LImage from '@/components/l-image';
-import LShape from '@/components/l-shape';
 import './style.less';
 
 const { TabPane } = Tabs;

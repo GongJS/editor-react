@@ -18,6 +18,7 @@ import ContextMenu from '@/components/context-menu';
 import logo from '@/assets/logo-simple.png';
 import HistoryArea from './history-area';
 import './style.less';
+import {AllComponentProps} from "@/defaultProps";
 
 const {
   Header, Content, Sider,
@@ -30,7 +31,7 @@ const Editor: React.FC = () => {
   const user = useRecoilValue(userData);
   const { logout } = useUser();
   const { cancelComponent } = useComponentData();
-  const clearSelection = (e: Event) => {
+  const clearSelection = (e: React.MouseEvent<HTMLDivElement>) => {
     const currentTarget = e.target as HTMLElement;
     if (currentTarget.classList.contains('preview-container')) {
       cancelComponent();
@@ -84,7 +85,7 @@ const Editor: React.FC = () => {
             <p>画布区域</p>
             <HistoryArea />
             <div className="preview-list" id="canvas-area">
-              <div className="body-container" style={{ ...editor.pageData }}>
+              <div className="body-container" style={{ ...editor.page.props }}>
                 {
                   editor.components.map((component) => (
                     <EditorWrapper
@@ -108,7 +109,7 @@ const Editor: React.FC = () => {
           <Tabs defaultActiveKey="1" type="card">
             <TabPane tab="属性设置" key="1">
               {
-                currentElement && !currentElement.isLocked ? <EditGroup props={currentElement.props} /> : (
+                currentElement?.id && !currentElement.isLocked ? <EditGroup props={currentElement.props as AllComponentProps} /> : (
                   <Empty
                     description={<p>该元素被锁定，无法编辑</p>}
                   />

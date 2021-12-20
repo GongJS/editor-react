@@ -1,7 +1,5 @@
 import React from 'react';
-import LText from '@/components/l-text';
-import LImage from '@/components/l-image';
-import LShape from '@/components/l-shape';
+import { LImage, LText, LShape } from 'lego-bricks-react';
 
 interface componentProps extends React.HTMLAttributes<Element> {
   name: string
