@@ -119,7 +119,7 @@ const Editor: React.FC = () => {
               <LayerList list={editor.components} selectedId={currentElement && currentElement.id} />
             </TabPane>
             <TabPane tab="页面设置" key="3">
-              <PropsTable props={editor.pageData} type="page" />
+              <PropsTable props={editor.page.props} type="page" />
             </TabPane>
           </Tabs>
         </Sider>

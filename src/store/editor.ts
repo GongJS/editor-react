@@ -3,12 +3,12 @@ import {
   selector,
 } from 'recoil';
 import {
-  TextComponentProps, ImageComponentProps,
+  TextComponentProps, ImageComponentProps, ShapeComponentProps,
 } from '@/defaultProps';
 
-export interface ComponentData {
+export interface ComponentDataProps {
   // 这个元素的 属性，属性请详见下面
-  props: Partial<TextComponentProps> & Partial<ImageComponentProps>;
+  props: Partial<TextComponentProps> & Partial<ImageComponentProps> & Partial<ShapeComponentProps>;
   // id，uuid v4 生成
   id: string;
   // 业务组件库名称 l-text，l-image 等等
@@ -21,32 +21,46 @@ export interface ComponentData {
   layerName?: string;
 }
 
-export interface PageData {
-  [key: string]: any ;
-  setting?: { [key: string]: any };
+export interface PageDataProps {
+  props: { [key: string]: any };
+  setting: { [key: string]: any };
   id?: number;
   title?: string;
   desc?: string;
   coverImg?: string;
   uuid?: string;
-}
-interface HistoryComponentProps {
-  past: ComponentData[][],
-  present: ComponentData[],
-  future: ComponentData[][]
-}
-export interface EditorProps {
-  // 供中间编辑器渲染的数组
-  components: ComponentData[];
-  // 当前编辑的是哪个元素，uuid
-  currentElement: string;
-  // 页面信息
-  pageData: PageData;
-  // 复制组件
-  copiedComponent: ComponentData,
+  latestPublishAt?: string;
+  updatedAt?: string;
+  isTemplate?: boolean;
+  isHot?: boolean;
+  isNew?: boolean;
+  author?: string;
+  copiedCount?: number;
+  status?: string;
+  user? : {
+    gender: string;
+    nickName: string;
+    picture: string;
+    userName: string;
+  };
 }
 
-export const testComponents: ComponentData[] = [];
+interface HistoryComponentProps {
+  past: ComponentDataProps[][],
+  present: ComponentDataProps[],
+  future: ComponentDataProps[][]
+}
+
+export interface EditorProps {
+  // 供中间编辑器渲染的数组
+  components: ComponentDataProps[];
+  // 当前编辑的是哪个组件，uuid
+  currentElement: string;
+  // 页面信息
+  page: PageDataProps;
+  // 复制组件
+  copiedComponent: ComponentDataProps,
+}
 
 const defaultPageData = {
   backgroundColor: '#ffffff',
@@ -55,13 +69,14 @@ const defaultPageData = {
   backgroundSize: 'cover',
   height: '560px',
 };
+
 const editorData = atom({
   key: 'editorData',
   default: {
-    components: testComponents,
-    pageData: defaultPageData,
+    components: [],
+    page: { props: defaultPageData, setting: {} },
     currentElement: '',
-    copiedComponent: {} as ComponentData,
+    copiedComponent: {} as ComponentDataProps,
   } as EditorProps,
 });
 

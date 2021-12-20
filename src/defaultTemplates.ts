@@ -1,5 +1,5 @@
 import {
-  commonDefaultProps, textDefaultProps, imageDefaultProps, shapeDefaultProps,
+  commonComponentDefaultData, textDefaultProps, imageDefaultProps, shapeDefaultProps,
 } from '@/defaultProps';
 
 export interface CreateComponentType {
@@ -108,39 +108,39 @@ const defaultTextTemplates = [
 ];
 const defaultImgTemplates = [
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/logo-white-735536.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/logo-black-049885.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/528w-0ilmEQMomZ8-108048.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/frame-096161.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/text-449964.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/text2-288504.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/bag-904186.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/text3-086652.png',
   },
   {
-    ...commonDefaultProps,
+    ...commonComponentDefaultData,
     src: 'http://static.imooc-lego.com/upload-files/text4-145592.png',
   },
 ];

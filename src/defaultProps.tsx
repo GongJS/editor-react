@@ -33,7 +33,7 @@ export interface CommonComponentProps {
   top: string;
   right: string;
 }
-export const commonDefaultProps: CommonComponentProps = {
+export const commonComponentDefaultData: CommonComponentProps = {
   // actions
   actionType: '',
   url: '',
@@ -76,22 +76,11 @@ export interface TextComponentProps extends CommonComponentProps {
   color: string;
   backgroundColor: string;
 }
-export type AllComponentProps = TextComponentProps & ImageComponentProps
-export interface PageProps {
-  backgroundColor: string;
-  backgroundImage: string;
-  backgroundRepeat: string;
-  backgroundSize: string;
-  height: string;
-}
-export type AllFormProps = PageProps & AllComponentProps
-export interface PageData {
-  props: PageProps;
-  title: string;
-}
+export type AllComponentProps = TextComponentProps & ImageComponentProps & ShapeComponentProps
+
 export const imageDefaultProps: ImageComponentProps = {
   src: '',
-  ...commonDefaultProps,
+  ...commonComponentDefaultData,
 };
 export const textDefaultProps: TextComponentProps = {
   // basic props - font styles
@@ -105,11 +94,11 @@ export const textDefaultProps: TextComponentProps = {
   textAlign: 'center',
   color: '#000000',
   backgroundColor: '',
-  ...commonDefaultProps,
+  ...commonComponentDefaultData,
 };
 export const shapeDefaultProps: ShapeComponentProps = {
   backgroundColor: '',
-  ...commonDefaultProps,
+  ...commonComponentDefaultData,
 };
 export const textStylePropNames = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text');
 export const imageStylePropsNames = without(Object.keys(imageDefaultProps), 'src', 'actionType', 'url', 'text');
@@ -122,11 +111,11 @@ export interface PropToForm {
   extraProps?: { [key: string]: any };
   text?: string;
   options?: { text: string; value: any }[];
-  afterTransform?: (e: any) => any;
+  afterTransform?: (v: any) => any;
   initialTransform?: (v: any) => any;
 }
 export type PropsToForms = {
-  [P in keyof AllFormProps]?: PropToForm
+  [key: string]: PropToForm
 }
 const fontFamilyArr = [
   { text: '宋体', value: '"SimSun","STSong"' },

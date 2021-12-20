@@ -3,8 +3,7 @@ import { message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep } from 'lodash-es';
 import { useEffect, useState } from 'react';
-import { PageProps } from '@/defaultProps';
-import editorData, { ComponentData, getCurrentElement, historyComponentsData } from '@/store/editor';
+import editorData, { ComponentDataProps, getCurrentElement, historyComponentsData } from '@/store/editor';
 import useDebounce from '@/hooks/useDebounce';
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
@@ -14,7 +13,7 @@ const useComponentData = () => {
   const [canRedo, setCanRedo] = useState(false);
   const [historyComponents, setHistoryComponents] = useRecoilState(historyComponentsData);
   const copyComponents = cloneDeep(editor.components);
-  const copyPageData = cloneDeep(editor.pageData);
+  const copyPageData = cloneDeep(editor.page);
   const currentElement = useRecoilValue(getCurrentElement);
   useEffect(() => {
     if (historyComponents.past.length > 0) {
@@ -29,7 +28,7 @@ const useComponentData = () => {
     }
   }, [historyComponents.past, historyComponents.future]);
 
-  const setComponentsData = (newComponents: ComponentData[]) => {
+  const setComponentsData = (newComponents: ComponentDataProps[]) => {
     setEditor((oldEditor) => ({
       ...oldEditor,
       components: newComponents,
@@ -38,7 +37,7 @@ const useComponentData = () => {
 
   const originUpdateComponent = (newValues:{ [p: string]: string}, id?: string, isRoot?: boolean) => {
     if (!currentElement) return;
-    copyComponents.map((component: ComponentData) => {
+    copyComponents.map((component: ComponentDataProps) => {
       if (isRoot) {
         if (component.id === id) {
           component = { ...component, ...newValues };
@@ -63,7 +62,7 @@ const useComponentData = () => {
 
   const updateComponent = useDebounce(originUpdateComponent, 1);
 
-  const addComponent = (component: ComponentData) => {
+  const addComponent = (component: ComponentDataProps) => {
     if (!component) return;
     component.layerName = `图层${editor.components.length + 1}`;
     const newComponents = [...editor.components, component];
@@ -169,17 +168,21 @@ const useComponentData = () => {
         updateComponent({ left: newValue });
         break;
       }
-
       default:
         break;
     }
   };
 
-  const updatePageData = (key: keyof PageProps, value: string) => {
-    copyPageData[key] = value;
+  const updatePageData = (key: string, value: string) => {
+    copyPageData.props[key] = value;
     setEditor((oldEditor) => ({
       ...oldEditor,
-      pageData: copyPageData,
+      page: {
+        ...copyPageData,
+        props: {
+          ...copyPageData.props,
+        },
+      },
     }));
   };
   return {

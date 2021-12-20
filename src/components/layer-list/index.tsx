@@ -4,13 +4,13 @@ import { arrayMoveImmutable } from 'array-move';
 import {
   EyeOutlined, EyeInvisibleOutlined, UnlockOutlined, LockOutlined,
 } from '@ant-design/icons';
-import { ComponentData } from '@/store/editor';
+import { ComponentDataProps } from '@/store/editor';
 import useComponentData from '@/hooks/useComponenetData';
 import InlineEdit from '@/components/inline-edit';
 import './style.less';
 
 interface LayerListProps {
-  list: ComponentData[]
+  list: ComponentDataProps[]
   selectedId: string | undefined
 }
 const LayerList: React.FC<LayerListProps> = ({ list, selectedId }) => {

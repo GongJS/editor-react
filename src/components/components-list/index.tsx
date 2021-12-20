@@ -6,9 +6,9 @@ import StyledUploader from '@/components/styled-uploader';
 import {
   textList, CreateComponentType, imageList, shapeList,
 } from '@/defaultTemplates';
-import { ComponentData } from '@/store/editor';
+import { ComponentDataProps } from '@/store/editor';
 import { getImageDimensions } from '@/helper';
-import { commonDefaultProps } from '@/defaultProps';
+import { commonComponentDefaultData } from '@/defaultProps';
 import { UploadResp } from '@/extraType';
 import useComponentData from '@/hooks/useComponenetData';
 import LText from '@/components/l-text';
@@ -20,7 +20,7 @@ const { TabPane } = Tabs;
 const ComponentsList: React.FC = () => {
   const { addComponent } = useComponentData();
   const addTextComponent = (component: CreateComponentType) => {
-    const newComponent: ComponentData = {
+    const newComponent: ComponentDataProps = {
       id: uuidv4(),
       name: component.name,
       props: {
@@ -30,7 +30,7 @@ const ComponentsList: React.FC = () => {
     addComponent(newComponent);
   };
   const addShapeComponent = (component: CreateComponentType) => {
-    const newComponent: ComponentData = {
+    const newComponent: ComponentDataProps = {
       id: uuidv4(),
       name: component.name,
       props: {
@@ -41,16 +41,16 @@ const ComponentsList: React.FC = () => {
   };
   const addImageComponent = (data : UploadResp) => {
     const src = data.data.urls[0];
-    const styleProps = { ...commonDefaultProps };
+    const styleProps = { ...commonComponentDefaultData };
     getImageDimensions(src).then(({ width }) => {
       const maxWidth = 373;
       styleProps.width = `${(width > maxWidth) ? maxWidth : width}px`;
-      const newComponent: ComponentData = {
+      const newComponent: ComponentDataProps = {
         id: uuidv4(),
         name: 'l-image',
         props: {
           src,
-          ...commonDefaultProps,
+          ...commonComponentDefaultData,
         },
       };
       addComponent(newComponent);
