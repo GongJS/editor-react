@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import { useRecoilValue } from 'recoil';
 import useComponentData from '@/hooks/useComponenetData';
-import editorData from '@/store/editor';
+import componentData from '@/store/editor';
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
 
@@ -41,7 +41,7 @@ export const operationText: { [key: string]: {text: string; shortcut: string} } 
 };
 
 export default function dataOperations(componentId: string) {
-  const editor = useRecoilValue(editorData);
+  const editor = useRecoilValue(componentData);
   const {
     copyComponent,
     pasteComponent,
@@ -56,19 +56,19 @@ export default function dataOperations(componentId: string) {
   return {
     copy: () => {
       if (componentId) {
-        copyComponent(componentId);
+        copyComponent();
         message.success('已拷贝当前图层', 1);
       }
     },
     paste: () => {
       if (componentId && editor.copiedComponent.id) {
-        pasteComponent(componentId);
+        pasteComponent();
         message.success('已黏贴当前图层', 1);
       }
     },
     delete: () => {
       if (componentId) {
-        deleteComponent(componentId);
+        deleteComponent();
         message.success('删除当前图层成功', 1);
       }
     },

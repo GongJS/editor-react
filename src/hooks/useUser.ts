@@ -1,10 +1,10 @@
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import userData, { UserProps } from '@/store/user';
 
 const useUser = () => {
-  const [user, setUser] = useRecoilState(userData);
+  const setUser = useSetRecoilState(userData);
   const navigate = useNavigate();
   const setUserData = (data: UserProps) => {
     setUser((oldUser) => ({
@@ -20,7 +20,7 @@ const useUser = () => {
       token: '',
       data: {},
     });
-    localStorage.removeItem('token', '');
+    localStorage.removeItem('token');
     message.success(msg || '退出登录成功，2秒后跳转到首页', 2);
     setTimeout(() => {
       navigate('/');

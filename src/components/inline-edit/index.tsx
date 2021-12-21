@@ -18,7 +18,7 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, id }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [innerValue, setInnerValue] = useState(value);
   const cachedOldValue = useRef('');
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsEditing(true);
   };

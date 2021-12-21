@@ -64,7 +64,7 @@ function App() {
         <Routes>
           <Route path="/" element={wrapperRequireAuth(Home)} />
           <Route path="/login" element={<Login />} />
-          <Route path="/editor" element={wrapperRequireAuth(Editor)} />
+          <Route path="/editor/:workId" element={wrapperRequireAuth(Editor)} />
           <Route path="/template/:id" element={wrapperRequireAuth(TemplateDetail)} />
         </Routes>
       </QueryClientProvider>

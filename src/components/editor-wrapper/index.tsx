@@ -127,8 +127,8 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
       const {
         left, right, top, bottom,
       } = currentElement.getBoundingClientRect();
-      const handleMove = (e: MouseEvent) => {
-        const size = caculateSize(direction, e, {
+      const handleMove = (event: MouseEvent) => {
+        const size = caculateSize(direction, event, {
           left, right, top, bottom,
         });
         updateComponent({ ...size });
@@ -146,9 +146,9 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
           }
         });
       };
-      const handleMouseUp = (e: MouseEvent) => {
+      const handleMouseUp = (event: MouseEvent) => {
         document.removeEventListener('mousemove', handleMove);
-        const size = caculateSize(direction, e, {
+        const size = caculateSize(direction, event, {
           left, right, top, bottom,
         });
         updateComponent({ ...size });
@@ -171,7 +171,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
       style={style as React.CSSProperties}
       className={['edit-wrapper', active ? 'active' : null, hidden ? 'hidden' : null].filter((item) => !!item).join(' ')}
     >
-      <div className="move-wrapper" ref={moveWrapper} onMouseDown={startMove}>
+      <div className="move-wrapper" ref={moveWrapper}>
         { children }
       </div>
       <div className="resizers">

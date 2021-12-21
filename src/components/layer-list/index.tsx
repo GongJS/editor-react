@@ -29,7 +29,7 @@ const LayerList: React.FC<LayerListProps> = ({ list, selectedId }) => {
   const onDragOver = (e: React.DragEvent<HTMLUListElement>) => {
     e.preventDefault();
   };
-  const onDragStart = (e: DragEvent, id: string, index: number) => {
+  const onDragStart = (id: string, index: number) => {
     setDragData(
       {
         currentDragging: id,
@@ -37,7 +37,7 @@ const LayerList: React.FC<LayerListProps> = ({ list, selectedId }) => {
       },
     );
   };
-  const onDragEnter = (e: DragEvent, index: number) => {
+  const onDragEnter = (index: number) => {
     if (index !== dragData.currentIndex) {
       const newList = arrayMoveImmutable(list, dragData.currentIndex, index);
       setDragData((data) => ({
@@ -55,11 +55,12 @@ const LayerList: React.FC<LayerListProps> = ({ list, selectedId }) => {
       {
        list.map((item, index) => (
          <li
-           className={['ant-list-item', item.id === selectedId ? 'active' : null, dragData?.currentDragging === item.id ? 'ghost' : null].join(' ')}
+           className={['ant-list-item', item.id === selectedId
+             ? 'active' : null, dragData?.currentDragging === item.id ? 'ghost' : null].filter((v) => !!v).join(' ')}
            key={item.id}
            onClick={() => handleClick(item.id)}
-           onDragStart={(e) => onDragStart(e, item.id, index)}
-           onDragEnter={(e) => onDragEnter(e, index)}
+           onDragStart={() => onDragStart(item.id, index)}
+           onDragEnter={() => onDragEnter(index)}
            draggable
            data-index={index}
          >

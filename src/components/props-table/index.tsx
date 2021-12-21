@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { reduce } from 'lodash-es';
 import {
-  AllComponentProps, mapPropsToForms, PropToForm, componentMap, PropsToForms, PageProps,
+  AllComponentProps, mapPropsToForms, PropToForm, componentMap, PropsToForms,
 } from '@/defaultProps';
 import useComponentData from '@/hooks/useComponenetData';
+import usePageData from '@/hooks/usePageData';
 import './style.less';
 
 interface PropsTableProps {
@@ -16,8 +17,9 @@ interface TagProps {
 }
 
 const PropsTable: React.FC<PropsTableProps> = ({ props, type }) => {
-  const { updateComponent, updatePageData } = useComponentData();
-  const handleChange = (v: any, k: keyof AllComponentProps & keyof PageProps, propsValue: PropToForm) => {
+  const { updateComponent } = useComponentData();
+  const { updatePageData } = usePageData();
+  const handleChange = (v: any, k: keyof AllComponentProps, propsValue: PropToForm) => {
     const value = propsValue.afterTransform ? propsValue.afterTransform(v) : v;
     if (type === 'page') {
       updatePageData(k, value);

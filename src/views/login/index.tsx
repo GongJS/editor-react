@@ -88,7 +88,11 @@ const Login: React.FC = () => {
     if (timing) {
       timer.current = window.setInterval(countdown, 1000);
     }
-    return () => timer.current && clearInterval(timer.current);
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+      }
+    };
   }, [timing]);
   return (
     <div className="login-page">

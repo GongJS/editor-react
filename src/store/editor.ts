@@ -56,8 +56,6 @@ export interface EditorProps {
   components: ComponentDataProps[];
   // 当前编辑的是哪个组件，uuid
   currentElement: string;
-  // 页面信息
-  page: PageDataProps;
   // 复制组件
   copiedComponent: ComponentDataProps,
 }
@@ -70,14 +68,21 @@ const defaultPageData = {
   height: '560px',
 };
 
-const editorData = atom({
+const componentData = atom({
   key: 'editorData',
   default: {
     components: [],
-    page: { props: defaultPageData, setting: {} },
     currentElement: '',
     copiedComponent: {} as ComponentDataProps,
   } as EditorProps,
+});
+
+export const pageData = atom({
+  key: 'pageData',
+  default: {
+    props: defaultPageData,
+    setting: {},
+  } as PageDataProps,
 });
 
 export const historyComponentsData = atom({
@@ -92,9 +97,9 @@ export const historyComponentsData = atom({
 export const getCurrentElement = selector({
   key: 'getCurrentElement',
   get: ({ get }) => {
-    const state = get(editorData);
+    const state = get(componentData);
     return state.components.find((component) => component.id === state.currentElement);
   },
 });
 
-export default editorData;
+export default componentData;

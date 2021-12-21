@@ -3,17 +3,16 @@ import { message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep } from 'lodash-es';
 import { useEffect, useState } from 'react';
-import editorData, { ComponentDataProps, getCurrentElement, historyComponentsData } from '@/store/editor';
+import componentData, { ComponentDataProps, getCurrentElement, historyComponentsData } from '@/store/editor';
 import useDebounce from '@/hooks/useDebounce';
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
 const useComponentData = () => {
-  const [editor, setEditor] = useRecoilState(editorData);
+  const [editor, setEditor] = useRecoilState(componentData);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   const [historyComponents, setHistoryComponents] = useRecoilState(historyComponentsData);
   const copyComponents = cloneDeep(editor.components);
-  const copyPageData = cloneDeep(editor.page);
   const currentElement = useRecoilValue(getCurrentElement);
   useEffect(() => {
     if (historyComponents.past.length > 0) {
@@ -172,19 +171,6 @@ const useComponentData = () => {
         break;
     }
   };
-
-  const updatePageData = (key: string, value: string) => {
-    copyPageData.props[key] = value;
-    setEditor((oldEditor) => ({
-      ...oldEditor,
-      page: {
-        ...copyPageData,
-        props: {
-          ...copyPageData.props,
-        },
-      },
-    }));
-  };
   return {
     updateComponent,
     addComponent,
@@ -195,7 +181,6 @@ const useComponentData = () => {
     pasteComponent,
     deleteComponent,
     moveComponent,
-    updatePageData,
     undoComponent,
     redoComponent,
     canRedo,

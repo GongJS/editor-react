@@ -7,26 +7,32 @@ import {
 import { useRecoilValue } from 'recoil';
 import useUser from '@/hooks/useUser';
 import userData from '@/store/user';
+import { useFetchCreateWork } from '@/utils/works';
 import './style.less';
 
 const UserProfile: React.FC = () => {
   const user = useRecoilValue(userData);
+  const { mutateAsync: createWorks, isLoading } = useFetchCreateWork();
   const { logout } = useUser();
   const navigate = useNavigate();
-  const createDesign = () => {
+  const createDesign = async () => {
     if (user.isLogin) {
       const payload = {
         title: '未命名作品',
         desc: '未命名作品',
         coverImg: 'http://typescript-vue.oss-cn-beijing.aliyuncs.com/vue-marker/5f81cca3f3bf7a0e1ebaf885.png',
       };
+      const workInfo = await createWorks(payload);
+      if (workInfo.errno === 0) {
+        navigate(`/editor/${workInfo.data.id}`);
+      }
     } else {
       navigate('/login');
     }
   };
   const menu = (
     <Menu>
-      <Menu.Item onClick={logout}>
+      <Menu.Item onClick={() => logout()}>
         登出
       </Menu.Item>
     </Menu>
@@ -44,7 +50,7 @@ const UserProfile: React.FC = () => {
         )
       }
       <div className="user-operation">
-        <Button type="primary" shape="round" onClick={createDesign}>
+        <Button type="primary" shape="round" onClick={createDesign} disabled={isLoading} loading={isLoading}>
           创建设计
         </Button>
         <Button type="primary" shape="round">
