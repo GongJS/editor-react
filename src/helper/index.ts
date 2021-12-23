@@ -1,4 +1,7 @@
 import { message } from 'antd';
+import axios from 'axios';
+import html2canvas from 'html2canvas';
+import { UploadResp } from '@/extraType';
 
 interface CheckCondition {
   format?: string[];
@@ -75,6 +78,34 @@ export const clickInsideElement = (e: Event, className: string) => {
 
   return false;
 };
-export const isMobile = (mobile: string) => {
-  return /^1[3-9]\d{9}$/.test(mobile)
-}
+export const isMobile = (mobile: string) => /^1[3-9]\d{9}$/.test(mobile);
+
+export const takeScreenshotAndUpload = (id: string) => {
+  const el = document.getElementById(id) as HTMLElement;
+  console.log(3333, el)
+  return html2canvas(
+    el,
+    { allowTaint: false, useCORS: true, width: 375 },
+  ).then((canvas) => new Promise<UploadResp>((resolve, reject) => {
+    canvas.toBlob((data) => {
+      console.log(999, data)
+      if (data) {
+        const newFile = new File([data], 'screenshot.png');
+        const formData = new FormData();
+        formData.append('file', newFile);
+        axios.post('http://1.116.156.44:8081/api/utils/upload-img', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          timeout: 5000,
+        }).then((data) => {
+          resolve(data.data);
+        }).catch((err) => {
+          reject(err);
+        });
+      } else {
+        reject(new Error('blob data error'));
+      }
+    }, 'image/png');
+  }));
+};

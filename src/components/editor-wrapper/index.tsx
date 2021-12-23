@@ -46,7 +46,6 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
     };
   };
   const startMove = (e: React.MouseEvent<HTMLDivElement>, currentId: string) => {
-    e.stopPropagation();
     selectComponent(currentId);
     const currentElement = editWrapper.current;
     if (currentElement) {
@@ -133,7 +132,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
         });
         updateComponent({ ...size });
         resizeElements.forEach((element) => {
-          const { style } = element;
+          const { style } = element!;
           if (size) {
             if (size.left) {
               style.left = `${size.left}px`;
@@ -167,11 +166,10 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
       ref={editWrapper}
       data-component-id={id}
       onClick={() => selectComponent(id)}
-      onMouseDown={(e) => startMove(e, id)}
       style={style as React.CSSProperties}
       className={['edit-wrapper', active ? 'active' : null, hidden ? 'hidden' : null].filter((item) => !!item).join(' ')}
     >
-      <div className="move-wrapper" ref={moveWrapper}>
+      <div className="move-wrapper" ref={moveWrapper} onMouseDown={(e) => startMove(e, id)}>
         { children }
       </div>
       <div className="resizers">

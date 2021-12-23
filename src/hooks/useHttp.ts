@@ -3,7 +3,8 @@ import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import userData from '@/store/user';
 
-const apiUrl = 'http://182.92.168.192:8081/api';
+export const baseH5URL = 'http://1.116.156.44:8082';
+const apiUrl = 'http://1.116.156.44:8081/api';
 
 interface Config extends RequestInit {
   token?: string;
@@ -37,7 +38,7 @@ export const http = async (
     .then(async (response) => {
       if (response.status === 401) {
         //  await auth.logout();
-        console.log(401)
+        console.log(401);
         window.location.reload();
         return Promise.reject({ message: '请重新登录' });
       }

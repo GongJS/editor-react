@@ -1,7 +1,7 @@
 import { useSetRecoilState } from 'recoil';
 import componentData, { pageData, PageDataProps, ComponentDataProps } from '@/store/editor';
 
-interface WorkProps extends PageDataProps {
+export interface WorkProps extends PageDataProps {
   content: {
     components: ComponentDataProps[],
     props: { [key: string]: any };
