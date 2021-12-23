@@ -24,7 +24,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const RequireAuth = ({ children }: { children: React.ReactNode }) => {
+const RequireAuth = ({ children }: { children: React.ReactElement }) => {
   const user = useRecoilValue(userData);
   const location = useLocation();
   if (!user.token) {

@@ -3,10 +3,15 @@ import {
   Row, Col, Card, Button,
 } from 'antd';
 import './style.less';
-import { TemplateProps } from '@/store';
 
 const { Meta } = Card;
-
+interface TemplateProps {
+  coverImg: string
+  author: string
+  copiedCount: number
+  title: string
+  id: string
+}
 interface TemplateListType {
   list: TemplateProps[]
 }
@@ -19,7 +24,9 @@ const TemplateList: React.FC<TemplateListType> = ({ list }) => (
               <Card hoverable>
                 <div className="img-wrapper">
                   {
-                    item.coverImg ? <img src={item.coverImg} alt="" /> : <img src="http://typescript-vue.oss-cn-beijing.aliyuncs.com/vue-marker/5f81cca3f3bf7a0e1ebaf885.png" alt="" />
+                    item.coverImg
+                      ? <img src={item.coverImg} alt="" />
+                      : <img src="http://typescript-vue.oss-cn-beijing.aliyuncs.com/vue-marker/5f81cca3f3bf7a0e1ebaf885.png" alt="" />
                   }
                   <div className="hover-item">
                     <Button size="large" type="primary">使用该模版创建</Button>

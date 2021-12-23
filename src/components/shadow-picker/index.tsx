@@ -27,7 +27,7 @@ const ShadowPicker: React.FC<ShadowPickerProps> = ({ value, onChange }) => {
       <div className="shadow-item">
         <span>阴影颜色:</span>
         <div className="shadow-component">
-          <ColorPicker value={values[3]} onChange={(v) => { updateValue(v, 3); }} />
+          <ColorPicker value={values[3]} onChange={(v) => { updateValue(parseInt(v, 10), 3); }} />
         </div>
       </div>
       <div className="shadow-item">

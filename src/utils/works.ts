@@ -1,15 +1,26 @@
 import { useMutation, useQuery } from 'react-query';
 import { useHttp } from '@/hooks/useHttp';
-import { LoginByPhoneNumberProps } from '@/views/login';
+import {ComponentDataProps} from '@/store/editor';
 
 interface PageParamsProps {
-  pageIndex: string
+  pageIndex: number
 }
 
 interface CreateWorksProps {
   title: string
   desc: string
   coverImg: string
+}
+
+interface SaveWorkProps {
+  content: {
+    components: ComponentDataProps[],
+    props: {[k: string]: any},
+    setting: {[k: string]: any},
+  },
+  coverImg?: string,
+  desc?: string,
+  title?: string
 }
 export const useFetchTemplates = (param: PageParamsProps) => {
   const client = useHttp();
@@ -33,5 +44,13 @@ export const useFetchCreateWork = () => {
   return useMutation((param: CreateWorksProps) => client('works', {
     data: param,
     method: 'POST',
+  }));
+};
+
+export const useFetchSaveWork = (workId?: string) => {
+  const client = useHttp();
+  return useMutation((param: SaveWorkProps) => client(`works/${workId}`, {
+    data: param,
+    method: 'PATCH',
   }));
 };
