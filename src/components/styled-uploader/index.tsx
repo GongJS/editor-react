@@ -6,20 +6,25 @@ import { UploadResp } from '@/extraType';
 import './style.less';
 
 interface StyledUploaderProps {
-  onSuccess: (params: UploadResp) => void
+  onSuccess: (params: UploadResp) => void;
+  uploadedImgSrc?: string;
 }
 
-const StyledUploader: React.FC<StyledUploaderProps> = ({ onSuccess }) => {
+const StyledUploader: React.FC<StyledUploaderProps> = ({ onSuccess, uploadedImgSrc }) => {
   const loadingSlot = (
     <div className="uploader-container">
       <LoadingOutlined spin />
       <h4>上传中</h4>
     </div>
   );
-  const uploadedSlot = (
+  const uploadedSlot = !uploadedImgSrc ? (
     <div className="uploader-container">
       <FileImageOutlined />
       <h4>上传图片</h4>
+    </div>
+  ) : (
+    <div className="uploader-container">
+      <img src={uploadedImgSrc} alt="" />
     </div>
   );
   return (
@@ -30,13 +35,13 @@ const StyledUploader: React.FC<StyledUploaderProps> = ({ onSuccess }) => {
         beforeUpload={commonUploadCheck}
         onSuccess={onSuccess}
       >
-        <div className="uploader-container">
-          <FileImageOutlined />
-          <h4>上传图片</h4>
-        </div>
+        { uploadedSlot }
       </Uploader>
     </div>
   );
 };
 
+StyledUploader.defaultProps = {
+  uploadedImgSrc: '',
+};
 export default StyledUploader;
