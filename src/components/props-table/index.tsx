@@ -18,11 +18,11 @@ interface TagProps {
 
 const PropsTable: React.FC<PropsTableProps> = ({ props, type }) => {
   const { updateComponent } = useComponentData();
-  const { updatePageData } = usePageData();
+  const { updatePagePropsData } = usePageData();
   const handleChange = (v: any, k: keyof AllComponentProps, propsValue: PropToForm) => {
     const value = propsValue.afterTransform ? propsValue.afterTransform(v) : v;
     if (type === 'page') {
-      updatePageData(k, value);
+      updatePagePropsData(k, value);
     } else {
       updateComponent({ [k]: value });
     }

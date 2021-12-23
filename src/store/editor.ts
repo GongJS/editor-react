@@ -20,12 +20,10 @@ export interface ComponentDataProps {
   // 图层名称
   layerName?: string;
 }
-
-export interface PageDataProps {
-  props: { [key: string]: any };
-  setting: { [key: string]: any };
+export interface PageDataNormalProps {
   id?: number;
   title?: string;
+  subTitle?: string;
   desc?: string;
   coverImg?: string;
   uuid?: string;
@@ -37,6 +35,10 @@ export interface PageDataProps {
   author?: string;
   copiedCount?: number;
   status?: string;
+}
+export interface PageDataProps extends PageDataNormalProps {
+  props: { [key: string]: any };
+  setting: { [key: string]: any };
   user? : {
     gender: string;
     nickName: string;
