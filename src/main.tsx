@@ -8,7 +8,7 @@ import './index.css';
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <BrowserRouter basename="/editor-react">
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </RecoilRoot>
