@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Row, Input, Form, Col, Button, message,
-} from 'antd';
+import { Row, Input, Form, Col, Button, message, Modal } from 'antd';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
@@ -13,15 +12,17 @@ import Logo2 from '@/assets/logo2.png';
 import './style.less';
 
 export interface LoginByPhoneNumberProps {
-  phoneNumber: string
-  veriCode: string,
+  phoneNumber: string;
+  veriCode: string;
 }
 const useGetCode = () => {
   const client = useHttp();
-  return useMutation((params: {phoneNumber: string}) => client('users/genVeriCode', {
-    data: params,
-    method: 'POST',
-  }));
+  return useMutation((params: { phoneNumber: string }) =>
+    client('users/genVeriCode', {
+      data: params,
+      method: 'POST',
+    }),
+  );
 };
 const COUNTDOWN_SECONDS = 60;
 const Login: React.FC = () => {
@@ -29,6 +30,8 @@ const Login: React.FC = () => {
   const timer = useRef<number | null>(null);
   const [timing, setTiming] = useState(false);
   const [second, setSecond] = useState(COUNTDOWN_SECONDS);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [code, setCode] = useState('');
   const navigate = useNavigate();
   const { setUserData } = useUser();
   const { mutateAsync: userLogin, isLoading: loginLoading } = useUserLogin();
@@ -36,9 +39,13 @@ const Login: React.FC = () => {
 
   const getCode = async () => {
     setTiming(true);
-    await getVericode({
+    const res = await getVericode({
       phoneNumber: form.getFieldValue('phoneNumber'),
     });
+    if (res.errno === 0) {
+      setCode(res.data.code);
+      setIsModalVisible(true);
+    }
     message.success('验证码已发送，请注意查收', 5);
   };
 
@@ -94,8 +101,20 @@ const Login: React.FC = () => {
       }
     };
   }, [timing]);
+  const copy = () => {
+    message.success('验证码复制成功');
+    setIsModalVisible(false);
+  };
   return (
     <div className="login-page">
+      <Modal title="验证码" visible={isModalVisible} closable={false} footer={null}>
+        <div className="modal-wrapper">
+          <Input readOnly value={code} disabled />
+          <CopyToClipboard onCopy={copy} text={code}>
+            <Button type="primary">复制</Button>
+          </CopyToClipboard>
+        </div>
+      </Modal>
       <Row>
         <Col span={12}>
           <div className="aside">
@@ -135,8 +154,13 @@ const Login: React.FC = () => {
                 <Button type="primary" htmlType="submit" loading={loginLoading}>
                   登录
                 </Button>
-                <Button htmlType="button" onClick={getCode} disabled={timing} loading={codeLoading}>
-                  { second === 60 ? '获取验证码' : `${second}秒后重发` }
+                <Button
+                  htmlType="button"
+                  onClick={getCode}
+                  disabled={timing}
+                  loading={codeLoading}
+                >
+                  {second === 60 ? '获取验证码' : `${second}秒后重发`}
                 </Button>
               </Form.Item>
             </Form>
