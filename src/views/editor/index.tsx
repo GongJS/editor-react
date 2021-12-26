@@ -2,6 +2,7 @@ import React, { useMemo, useState, useRef } from 'react';
 import { Layout, Tabs, Empty, Button, Dropdown, Menu, Spin, Drawer, Modal } from 'antd';
 import { useRecoilValue } from 'recoil';
 import { Link, useParams } from 'react-router-dom';
+import { BootstrapComponent } from 'lego-bricks-react';
 import componentData, { getCurrentElement, pageData } from '@/store/editor';
 import userData from '@/store/user';
 import useUser from '@/hooks/useUser';
@@ -14,7 +15,6 @@ import {
   useFetchPublishWork,
   useFetchGetChannels,
 } from '@/utils/works';
-import BootstrapComponent from '@/components/bootstrap-component';
 import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
