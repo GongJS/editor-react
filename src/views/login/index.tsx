@@ -43,8 +43,10 @@ const Login: React.FC = () => {
       phoneNumber: form.getFieldValue('phoneNumber'),
     });
     if (res.errno === 0) {
-      setCode(res.data.code);
-      setIsModalVisible(true);
+      setTimeout(() => {
+        setCode(res.data.code);
+        setIsModalVisible(true);
+      }, 1000);
     }
     message.success('验证码已发送，请注意查收', 5);
   };

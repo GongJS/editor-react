@@ -136,20 +136,34 @@ export const useFetchCreateWork = () => {
 
 export const useFetchSaveWork = (workId?: string) => {
   const client = useHttp();
-  return useMutation((param: SaveWorkProps) =>
-    client(`works/${workId}`, {
-      data: param,
-      method: 'PATCH',
-    }),
+  const { saveWork } = useWork();
+  return useMutation(
+    (param: SaveWorkProps) =>
+      client(`works/${workId}`, {
+        data: param,
+        method: 'PATCH',
+      }),
+    {
+      onSuccess: () => {
+        saveWork();
+      },
+    },
   );
 };
 
 export const useFetchCopyWork = () => {
   const client = useHttp();
-  return useMutation((workId: string) =>
-    client(`works/copy/${workId}`, {
-      method: 'POST',
-    }),
+  const { copyWork } = useWork();
+  return useMutation(
+    (workId: string) =>
+      client(`works/copy/${workId}`, {
+        method: 'POST',
+      }),
+    {
+      onSuccess: () => {
+        copyWork();
+      },
+    },
   );
 };
 

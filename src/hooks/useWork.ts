@@ -39,6 +39,9 @@ const useWork = () => {
       components: [...content.components],
     }));
   };
+  const saveWork = () => {
+    updatePageNormalData('updatedAt', new Date().toISOString());
+  };
   const copyWork = () => {
     updatePageNormalData('updatedAt', new Date().toISOString());
   };
@@ -60,6 +63,7 @@ const useWork = () => {
   return {
     getWork,
     copyWork,
+    saveWork,
     getChannels,
     createChannel,
     deleteChannel,

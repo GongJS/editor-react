@@ -3,7 +3,6 @@ import { Row, Col, Card, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useFetchCopyWork } from '@/utils/works';
 import { TemplateDataProps } from '@/store/editor';
-import useWork from '@/hooks/useWork';
 import './style.less';
 
 const { Meta } = Card;
@@ -14,11 +13,9 @@ interface TemplateListType {
 const TemplateList: React.FC<TemplateListType> = ({ list }) => {
   const navigate = useNavigate();
   const { mutateAsync: fetchCopyWork } = useFetchCopyWork();
-  const { copyWork } = useWork();
   const handleCreateWork = async (workId: number) => {
     const res = await fetchCopyWork(workId.toString());
     if (res.errno === 0) {
-      copyWork();
       navigate(`/editor/${res.data.id}`);
     }
   };

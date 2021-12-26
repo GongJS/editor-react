@@ -77,7 +77,7 @@ const Home: React.FC = () => {
             <div className="my-works">
               <div className="content-title">
                 <h2>我的作品</h2>
-                <Link to="/mywork">查看我的所有作品</Link>
+                {/*<Link to="/mywork">查看我的所有作品</Link>*/}
               </div>
               {!workListLoading ? (
                 <TemplateList list={worksData?.data?.list} />
