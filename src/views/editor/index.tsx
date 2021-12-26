@@ -190,7 +190,12 @@ const Editor: React.FC = () => {
             乐高
           </div>
           <div className="user-operation">
-            <Button type="primary" shape="round" onClick={() => previewWork()}>
+            <Button
+              type="primary"
+              shape="round"
+              onClick={() => previewWork()}
+              loading={isSaving}
+            >
               预览和设置
             </Button>
             <Button type="primary" shape="round" onClick={saveWork} loading={isSaving}>

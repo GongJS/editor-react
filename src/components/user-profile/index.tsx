@@ -42,13 +42,7 @@ const UserProfile: React.FC = () => {
         </Button>
       )}
       <div className="user-operation">
-        <Button
-          type="primary"
-          shape="round"
-          onClick={createDesign}
-          disabled={isLoading}
-          loading={isLoading}
-        >
+        <Button type="primary" shape="round" onClick={createDesign} loading={isLoading}>
           创建设计
         </Button>
         {/*<Button type="primary" shape="round">*/}

@@ -29,12 +29,13 @@ const Login: React.FC = () => {
   const [form] = Form.useForm();
   const timer = useRef<number | null>(null);
   const [timing, setTiming] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
   const [second, setSecond] = useState(COUNTDOWN_SECONDS);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [code, setCode] = useState('');
   const navigate = useNavigate();
   const { setUserData } = useUser();
-  const { mutateAsync: userLogin, isLoading: loginLoading } = useUserLogin();
+  const { mutateAsync: userLogin } = useUserLogin();
   const { mutateAsync: getVericode, isLoading: codeLoading } = useGetCode();
 
   const getCode = async () => {
@@ -52,6 +53,7 @@ const Login: React.FC = () => {
   };
 
   const onFinish = async (values: LoginByPhoneNumberProps) => {
+    setLoginLoading(true);
     const res = await userLogin(values);
     if (res.errno === 0) {
       const userInfo = await getUserInfo(res.data.token);
@@ -65,9 +67,11 @@ const Login: React.FC = () => {
         });
         message.success('登录成功 2秒后跳转首页');
         setTimeout(() => {
+          setLoginLoading(false);
           navigate('/');
         }, 2000);
       } else {
+        setLoginLoading(false);
         message.success(userInfo.message);
       }
     } else {
