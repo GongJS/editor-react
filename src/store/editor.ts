@@ -1,14 +1,17 @@
+import { atom, selector } from 'recoil';
 import {
-  atom,
-  selector,
-} from 'recoil';
-import {
-  TextComponentProps, ImageComponentProps, ShapeComponentProps,
+  TextComponentProps,
+  ImageComponentProps,
+  ShapeComponentProps,
 } from '@/defaultProps';
+
+import { defaultTemplateData } from '@/defaultData';
 
 export interface ComponentDataProps {
   // 这个元素的 属性，属性请详见下面
-  props: Partial<TextComponentProps> & Partial<ImageComponentProps> & Partial<ShapeComponentProps>;
+  props: Partial<TextComponentProps> &
+    Partial<ImageComponentProps> &
+    Partial<ShapeComponentProps>;
   // id，uuid v4 生成
   id: string;
   // 业务组件库名称 l-text，l-image 等等
@@ -36,10 +39,29 @@ export interface PageDataNormalProps {
   copiedCount?: number;
   status?: string;
 }
+export interface TemplateDataProps {
+  id: number;
+  copiedCount: number;
+  title: string;
+  author: string;
+  desc: string;
+  coverImg: string;
+  createdAt: string;
+  isHot: boolean;
+  user: {
+    nickName: string;
+    username: string;
+  };
+}
+export interface ChannelDataProps {
+  id: number;
+  name: string;
+  workId: number;
+}
 export interface PageDataProps extends PageDataNormalProps {
   props: { [key: string]: any };
   setting: { [key: string]: any };
-  user? : {
+  user?: {
     gender: string;
     nickName: string;
     picture: string;
@@ -48,9 +70,9 @@ export interface PageDataProps extends PageDataNormalProps {
 }
 
 interface HistoryComponentProps {
-  past: ComponentDataProps[][],
-  present: ComponentDataProps[],
-  future: ComponentDataProps[][]
+  past: ComponentDataProps[][];
+  present: ComponentDataProps[];
+  future: ComponentDataProps[][];
 }
 
 export interface EditorProps {
@@ -59,12 +81,13 @@ export interface EditorProps {
   // 当前编辑的是哪个组件，uuid
   currentElement: string;
   // 复制组件
-  copiedComponent: ComponentDataProps,
+  copiedComponent: ComponentDataProps;
 }
 
 const defaultPageData = {
   backgroundColor: '#ffffff',
-  backgroundImage: 'url("https://static.imooc-lego.com/upload-files/%E5%B9%BC%E5%84%BF%E5%9B%AD%E8%83%8C%E6%99%AF%E5%9B%BE-994372.jpg")',
+  backgroundImage:
+    'url("https://static.imooc-lego.com/upload-files/%E5%B9%BC%E5%84%BF%E5%9B%AD%E8%83%8C%E6%99%AF%E5%9B%BE-994372.jpg")',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   height: '560px',
@@ -94,6 +117,11 @@ export const historyComponentsData = atom({
     present: [],
     future: [],
   } as HistoryComponentProps,
+});
+
+export const channelsData = atom({
+  key: 'channelsData',
+  default: [] as ChannelDataProps[],
 });
 
 export const getCurrentElement = selector({

@@ -1,18 +1,19 @@
-import React, {
-  useEffect, useMemo, useState, useRef,
-} from 'react';
-import {
-  Layout, Tabs, Empty, Button, Dropdown, Menu, Spin, Drawer,
-} from 'antd';
+import React, { useMemo, useState, useRef } from 'react';
+import { Layout, Tabs, Empty, Button, Dropdown, Menu, Spin, Drawer, Modal } from 'antd';
 import { useRecoilValue } from 'recoil';
 import { Link, useParams } from 'react-router-dom';
 import componentData, { getCurrentElement, pageData } from '@/store/editor';
 import userData from '@/store/user';
 import useUser from '@/hooks/useUser';
 import usePageData from '@/hooks/usePageData';
+import { baseH5URL } from '@/hooks/useHttp';
 import useComponentData from '@/hooks/useComponenetData';
-import useWork from '@/hooks/useWork';
-import { useFetchWorkById, useFetchSaveWork } from '@/utils/works';
+import {
+  useFetchWorkById,
+  useFetchSaveWork,
+  useFetchPublishWork,
+  useFetchGetChannels,
+} from '@/utils/works';
 import BootstrapComponent from '@/components/bootstrap-component';
 import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
@@ -20,46 +21,62 @@ import PropsTable from '@/components/props-table';
 import LayerList from '@/components/layer-list';
 import EditGroup from '@/components/edit-group';
 import ContextMenu from '@/components/context-menu';
-import PublishFormProps from '@/components/publish-form';
+import PublishForm from '@/components/publish-form';
+import ChannelForm from '@/components/channel-form';
 import { AllComponentProps } from '@/defaultProps';
-import { baseH5URL } from '@/hooks/useHttp';
 import { takeScreenshotAndUpload } from '@/helper';
 import logo from '@/assets/logo-simple.png';
 import HistoryArea from './history-area';
 import './style.less';
 
-const {
-  Header, Content, Sider,
-} = Layout;
+const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
 
 const Editor: React.FC = () => {
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+  const [isChannelFormVisible, setIsChannelFormVisible] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [canvasFix, setCanvasFix] = useState(false);
-  const editor = useRecoilValue(componentData);
   const page = useRecoilValue(pageData);
   const coverImg = useRef(page.coverImg);
+  const editor = useRecoilValue(componentData);
   const currentElement = useRecoilValue(getCurrentElement);
   const user = useRecoilValue(userData);
-  const { getWork } = useWork();
   const { logout } = useUser();
   const { updatePageNormalData } = usePageData();
   const { cancelComponent } = useComponentData();
   const { workId } = useParams();
-  const { data, isLoading } = useFetchWorkById(workId);
+  const { isLoading } = useFetchWorkById(workId);
   const { mutateAsync: fetchSaveWork, isLoading: isSaving } = useFetchSaveWork(workId);
-  const previewURL = useMemo(() => `${baseH5URL}/p/preview/${page.id}-${page.uuid}`, [page.id, page.uuid]);
-  useEffect(() => {
-    if (data?.errno === 0) {
-      getWork(data.data);
-    }
-  }, [data]);
+  const { mutateAsync: fetchPublishWork } = useFetchPublishWork();
+  const { data: channelsData, refetch: refetchChannels } = useFetchGetChannels(workId);
+
+  const previewURL = useMemo(
+    () => `${baseH5URL}/p/preview/${page.id}-${page.uuid}`,
+    [page.id, page.uuid],
+  );
   const clearSelection = (e: React.MouseEvent<HTMLDivElement>) => {
     const currentTarget = e.target as HTMLElement;
     if (currentTarget.classList.contains('preview-container')) {
       cancelComponent();
+    }
+  };
+  const takeScreenUpdate = async (checkSave = false) => {
+    try {
+      const rawData = await takeScreenshotAndUpload('canvas-area');
+      if (rawData) {
+        const url = rawData.data.urls[0];
+        updatePageNormalData('coverImg', url);
+        coverImg.current = url;
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setCanvasFix(false);
+      if (checkSave) {
+        saveWork();
+      }
     }
   };
   const saveWork = async () => {
@@ -87,27 +104,17 @@ const Editor: React.FC = () => {
     setIsDrawerVisible(false);
     setIsPreviewVisible(false);
   };
-  const takeScreenUpdate = async (checkSave = false) => new Promise((resolve, reject): void => {
+  const handlePublishWork = async () => {
+    setIsPublishing(true);
     setTimeout(async () => {
-      try {
-        const rawData = await takeScreenshotAndUpload('canvas-area');
-        if (rawData) {
-          const url = rawData.data.urls[0];
-          updatePageNormalData('coverImg', url);
-          coverImg.current = url;
-        }
-        resolve(null);
-      } catch (e) {
-        console.error(e);
-        reject(e);
-      } finally {
-        setCanvasFix(false);
-        if (checkSave) {
-          saveWork();
-        }
-      }
-    });
-  });
+      await takeScreenUpdate();
+      await fetchPublishWork(workId);
+      await refetchChannels();
+      setIsPublishing(false);
+      setIsChannelFormVisible(true);
+    }, 200);
+  };
+
   const checkAndpublish = async () => {
     setIsPublishing(true);
     try {
@@ -118,6 +125,7 @@ const Editor: React.FC = () => {
       console.error(e);
     } finally {
       setIsPublishing(false);
+      setIsChannelFormVisible(true);
       closePreview();
     }
   };
@@ -126,31 +134,41 @@ const Editor: React.FC = () => {
       <Menu.Item onClick={() => logout()}>
         <Link to="/mywork">我的作品</Link>
       </Menu.Item>
-      <Menu.Item onClick={() => logout()}>
-        登出
-      </Menu.Item>
+      <Menu.Item onClick={() => logout()}>登出</Menu.Item>
     </Menu>
   );
   return (
     <div className="editor" id="editor-layout-main">
       <ContextMenu />
-      <Drawer title="设置面板" placement="right" onClose={closePreview} visible={isDrawerVisible}>
-        <PublishFormProps
+      <Modal
+        visible={isChannelFormVisible}
+        forceRender
+        footer={null}
+        width="700px"
+        title="发布成功"
+        onCancel={() => setIsChannelFormVisible(false)}
+      >
+        <ChannelForm currentWorkId={workId} channels={channelsData?.data.list || []} />
+      </Modal>
+      <Drawer
+        title="设置面板"
+        placement="right"
+        onClose={closePreview}
+        visible={isDrawerVisible}
+      >
+        <PublishForm
           closePreview={closePreview}
-          saveWork={previewWork}
+          saveWork={saveWork}
           checkAndpublish={checkAndpublish}
           isSaving={isSaving}
           previewURL={previewURL}
           isPublishing={isPublishing}
         />
       </Drawer>
-      {
-        isPreviewVisible && (
+      {isPreviewVisible && (
         <div className="final-preview">
           <div className="final-preview-inner">
-            <div className="preview-title">
-              {page.title}
-            </div>
+            <div className="preview-title">{page.title}</div>
             <div className="iframe-container">
               <iframe
                 src={previewURL}
@@ -162,8 +180,7 @@ const Editor: React.FC = () => {
             </div>
           </div>
         </div>
-        )
-      }
+      )}
       <Layout style={{ background: '#fff' }}>
         <Header className="header">
           <div className="page-title" style={{ color: '#fff' }}>
@@ -176,15 +193,18 @@ const Editor: React.FC = () => {
             <Button type="primary" shape="round" onClick={() => previewWork()}>
               预览和设置
             </Button>
-            <Button type="primary" shape="round">
+            <Button type="primary" shape="round" onClick={saveWork} loading={isSaving}>
               保存
             </Button>
-            <Button type="primary" shape="round">
+            <Button
+              type="primary"
+              shape="round"
+              onClick={handlePublishWork}
+              loading={isPublishing}
+            >
               发布
             </Button>
-            <Dropdown.Button overlay={menu}>
-              {user.data.nickName}
-            </Dropdown.Button>
+            <Dropdown.Button overlay={menu}>{user.data.nickName}</Dropdown.Button>
           </div>
         </Header>
       </Layout>
@@ -195,47 +215,49 @@ const Editor: React.FC = () => {
           </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          {
-            isLoading ? <Spin /> : (
-              <Content className="preview-container" onMouseDown={clearSelection}>
-                <p>画布区域</p>
-                <HistoryArea />
-                <div className={['preview-list', canvasFix ? 'canvas-fix' : null].filter((item) => !!item).join(' ')} id="canvas-area">
-                  <div className="body-container" style={{ ...page.props }}>
-                    {
-                    editor.components.map((component) => (
-                      <EditorWrapper
-                        key={component.id}
-                        id={component.id}
-                        active={currentElement?.id === component.id}
-                        hidden={component.isHidden}
-                        props={component.props}
-                      >
-                        <BootstrapComponent
-                          {...component}
-                        />
-                      </EditorWrapper>
-                    ))
-                  }
-                  </div>
+          {isLoading ? (
+            <Spin />
+          ) : (
+            <Content className="preview-container" onMouseDown={clearSelection}>
+              <p>画布区域</p>
+              <HistoryArea />
+              <div
+                className={['preview-list', canvasFix ? 'canvas-fix' : null]
+                  .filter((item) => !!item)
+                  .join(' ')}
+                id="canvas-area"
+              >
+                <div className="body-container" style={{ ...page.props }}>
+                  {editor.components.map((component) => (
+                    <EditorWrapper
+                      key={component.id}
+                      id={component.id}
+                      active={currentElement?.id === component.id}
+                      hidden={component.isHidden}
+                      props={component.props}
+                    >
+                      <BootstrapComponent {...component} />
+                    </EditorWrapper>
+                  ))}
                 </div>
-              </Content>
-            )
-          }
+              </div>
+            </Content>
+          )}
         </Layout>
         <Sider width="300" style={{ background: 'white' }} className="settings-panel">
           <Tabs defaultActiveKey="1" type="card">
             <TabPane tab="属性设置" key="1">
-              {
-                currentElement?.id && !currentElement.isLocked ? <EditGroup props={currentElement.props as AllComponentProps} /> : (
-                  <Empty
-                    description={<p>该元素被锁定，无法编辑</p>}
-                  />
-                )
-              }
+              {currentElement?.id && !currentElement.isLocked ? (
+                <EditGroup props={currentElement.props as AllComponentProps} />
+              ) : (
+                <Empty description={<p>该元素被锁定，无法编辑</p>} />
+              )}
             </TabPane>
             <TabPane tab="图层设置" key="2">
-              <LayerList list={editor.components} selectedId={currentElement && currentElement.id} />
+              <LayerList
+                list={editor.components}
+                selectedId={currentElement && currentElement.id}
+              />
             </TabPane>
             <TabPane tab="页面设置" key="3">
               <PropsTable props={page.props} type="page" />

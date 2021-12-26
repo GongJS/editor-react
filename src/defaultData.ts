@@ -1,6 +1,10 @@
 import {
-  commonComponentDefaultData, textDefaultProps, imageDefaultProps, shapeDefaultProps,
+  commonComponentDefaultData,
+  textDefaultProps,
+  imageDefaultProps,
+  shapeDefaultProps,
 } from '@/defaultProps';
+import { TemplateDataProps } from '@/store/editor';
 
 export interface CreateComponentType {
   name: 'l-text' | 'l-image' | 'l-shape';
@@ -15,6 +19,64 @@ interface DefaultPropsType {
     extraProps?: { [key: string]: any };
   };
 }
+export const defaultTemplateData: TemplateDataProps[] = [
+  {
+    id: 27,
+    title: '樊登读书-意志力',
+    desc: '樊登读书-意志力',
+    author: '159****5014',
+    coverImg: 'http://static.imooc-lego.com/upload-files/screenshot-126349.png',
+    copiedCount: 22,
+    isHot: false,
+    createdAt: '2020-11-18T09:15:48.000Z',
+    user: {
+      username: '13611915632',
+      nickName: '乐高5632',
+    },
+  },
+  {
+    id: 28,
+    title: '中秋快乐',
+    desc: '中秋快乐',
+    author: '159****5014',
+    coverImg: 'http://static.imooc-lego.com/upload-files/screenshot-388804.png',
+    copiedCount: 59,
+    isHot: false,
+    createdAt: '2020-11-18T09:15:48.000Z',
+    user: {
+      username: '13611915632',
+      nickName: '乐高5632',
+    },
+  },
+  {
+    id: 26,
+    title: '幸福的方法',
+    desc: '幸福的方法',
+    author: '159****5014',
+    coverImg: 'http://static.imooc-lego.com/upload-files/screenshot-882241.png',
+    copiedCount: 35,
+    isHot: false,
+    createdAt: '2020-11-18T11:27:24.000Z',
+    user: {
+      username: '13611915632',
+      nickName: '乐高5632',
+    },
+  },
+  {
+    id: 29,
+    title: '招募令',
+    desc: '未命名作品',
+    author: '136****5632',
+    coverImg: 'https://static.imooc-lego.com/upload-files/screenshot-609669.png',
+    copiedCount: 28,
+    isHot: false,
+    createdAt: '2020-11-18T01:48:04.000Z',
+    user: {
+      username: '13611915632',
+      nickName: '乐高5632',
+    },
+  },
+];
 
 const componentsDefaultProps: DefaultPropsType = {
   'l-text': {
@@ -23,8 +85,8 @@ const componentsDefaultProps: DefaultPropsType = {
       fontSize: '14px',
       width: '125px',
       height: '36px',
-      left: `${(320 / 2) - (125 / 2)}px`,
-      top: `${(500 / 2) - (36 / 2)}px`,
+      left: `${320 / 2 - 125 / 2}px`,
+      top: `${500 / 2 - 36 / 2}px`,
     },
   },
   'l-image': {

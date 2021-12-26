@@ -1,16 +1,25 @@
 import { useSetRecoilState } from 'recoil';
-import componentData, { pageData, PageDataProps, ComponentDataProps } from '@/store/editor';
+import componentData, {
+  pageData,
+  channelsData,
+  PageDataProps,
+  ChannelDataProps,
+  ComponentDataProps,
+} from '@/store/editor';
+import usePageData from '@/hooks/usePageData';
 
 export interface WorkProps extends PageDataProps {
   content: {
-    components: ComponentDataProps[],
+    components: ComponentDataProps[];
     props: { [key: string]: any };
     setting: { [key: string]: any };
-  }
+  };
 }
 const useWork = () => {
   const setComponent = useSetRecoilState(componentData);
   const setPage = useSetRecoilState(pageData);
+  const setChannels = useSetRecoilState(channelsData);
+  const { updatePageNormalData } = usePageData();
   const getWork = (data: WorkProps) => {
     const { content, ...rest } = data;
     setPage((oldPage) => ({
@@ -27,13 +36,35 @@ const useWork = () => {
     }));
     setComponent((oldComponent) => ({
       ...oldComponent,
-      components: [
-        ...content.components,
-      ],
+      components: [...content.components],
     }));
+  };
+  const copyWork = () => {
+    updatePageNormalData('updatedAt', new Date().toISOString());
+  };
+  const getChannels = (channelList: ChannelDataProps[]) => {
+    setChannels(channelList);
+  };
+  const createChannel = (data: ChannelDataProps) => {
+    setChannels((oldChannels) => [...oldChannels, data]);
+  };
+  const deleteChannel = (channelId: number) => {
+    setChannels((oldChannels) => oldChannels.filter((ch) => ch.id !== channelId));
+  };
+  const publishTemplate = () => {
+    updatePageNormalData('isTemplate', true);
+  };
+  const publishWork = () => {
+    updatePageNormalData('latestPublishAt', new Date().toISOString());
   };
   return {
     getWork,
+    copyWork,
+    getChannels,
+    createChannel,
+    deleteChannel,
+    publishTemplate,
+    publishWork,
   };
 };
 
