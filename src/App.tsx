@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react';
-import {
-  Routes, Route, Navigate,
-  useLocation,
-} from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import userData from '@/store/user';
 import Home from '@/views/home';
-import TemplateDetail from '@/views/templateDetail';
 import Editor from '@/views/editor';
 import Login from '@/views/login';
 import { getUserInfo } from '@/utils/user';
@@ -65,7 +61,6 @@ function App() {
           <Route path="/" element={wrapperRequireAuth(Home)} />
           <Route path="/login" element={<Login />} />
           <Route path="/editor/:workId" element={wrapperRequireAuth(Editor)} />
-          <Route path="/template/:id" element={wrapperRequireAuth(TemplateDetail)} />
         </Routes>
       </QueryClientProvider>
     </div>
