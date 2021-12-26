@@ -52,7 +52,7 @@ export const useFetchPublishTemplate = () => {
 
 export const useFetchWorks = (param?: PageParamsProps) => {
   const client = useHttp();
-  return useQuery(['works', param], () => client('works', { data: param }));
+  return useQuery(['getWorks', param], () => client('works', { data: param }));
 };
 
 export const useFetchWorkById = (workId?: string) => {
@@ -131,6 +131,22 @@ export const useFetchCreateWork = () => {
       data: param,
       method: 'POST',
     }),
+  );
+};
+
+export const useFetchDeleteWork = () => {
+  const client = useHttp();
+  const queryClient = useQueryClient();
+  return useMutation(
+    (workId: string | number) =>
+      client(`works/${workId}`, {
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries('getWorks');
+      },
+    },
   );
 };
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Button } from 'antd';
+import { Row, Col, Card, Button, Divider, Modal } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useFetchCopyWork } from '@/utils/works';
+import { useFetchCopyWork, useFetchDeleteWork } from '@/utils/works';
 import { TemplateDataProps } from '@/store/editor';
 import './style.less';
 
@@ -13,14 +14,29 @@ interface TemplateListType {
 const WorkList: React.FC<TemplateListType> = ({ list }) => {
   const navigate = useNavigate();
   const { mutateAsync: fetchCopyWork } = useFetchCopyWork();
+  const { mutateAsync: fetchDeleteWork } = useFetchDeleteWork();
   const handleCreateWork = async (workId: number) => {
-    const res = await fetchCopyWork(workId.toString());
+    const res = await fetchCopyWork(workId);
     if (res.errno === 0) {
       navigate(`/editor/${res.data.id}`);
     }
   };
+  const handleEditWork = (id: number) => {
+    navigate(`/editor/${id}`);
+  };
+  const handleDeleteWork = (id: number) => {
+    Modal.confirm({
+      title: '确定要删除该作品吗？',
+      okText: '删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk: async () => {
+        await fetchDeleteWork(id);
+      },
+    });
+  };
   return (
-    <div className="template-list-component">
+    <div className="work-list-component">
       <Row gutter={16}>
         {list.map((item) => (
           <Col span={6} key={item.id} className="poster-item">
@@ -44,12 +60,15 @@ const WorkList: React.FC<TemplateListType> = ({ list }) => {
                 title={item.title}
                 description={
                   <div className="description-detail">
-                    <span>
-                      {' '}
-                      作者：
-                      {item.author}
+                    <span onClick={() => handleEditWork(item.id)}>
+                      编辑
+                      <EditOutlined />
                     </span>
-                    <span className="user-number">{item.copiedCount}</span>
+                    <Divider type="vertical" />
+                    <span onClick={() => handleDeleteWork(item.id)}>
+                      删除
+                      <DeleteOutlined />
+                    </span>
                   </div>
                 }
               />

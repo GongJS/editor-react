@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { Link } from 'react-router-dom';
 import userData from '@/store/user';
 import TemplateList from '@/components/template-list';
+import WorkList from '@/components/work-list';
 import UserProfile from '@/components/user-profile';
 import { useFetchTemplates, useFetchWorks } from '@/utils/works';
 import { defaultTemplateData } from '@/defaultData';
@@ -77,13 +78,9 @@ const Home: React.FC = () => {
             <div className="my-works">
               <div className="content-title">
                 <h2>我的作品</h2>
-                {/*<Link to="/mywork">查看我的所有作品</Link>*/}
+                {/* <Link to="/mywork">查看我的所有作品</Link> */}
               </div>
-              {!workListLoading ? (
-                <TemplateList list={worksData?.data?.list} />
-              ) : (
-                <Spin />
-              )}
+              {!workListLoading ? <WorkList list={worksData?.data?.list} /> : <Spin />}
             </div>
           )}
         </Content>
