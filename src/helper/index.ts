@@ -100,7 +100,7 @@ export const takeScreenshotAndUpload = (id: string) => {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
-                timeout: 5000,
+                timeout: 10000,
               })
               .then((res) => {
                 resolve(res.data);

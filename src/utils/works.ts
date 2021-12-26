@@ -171,7 +171,7 @@ export const useFetchCopyWork = () => {
   const client = useHttp();
   const { copyWork } = useWork();
   return useMutation(
-    (workId: string) =>
+    (workId: string | number) =>
       client(`works/copy/${workId}`, {
         method: 'POST',
       }),
