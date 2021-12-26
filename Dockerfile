@@ -1,7 +1,7 @@
 FROM node:12
 COPY ./ /app
 WORKDIR /app
-RUN npm install && npm run build
+RUN npm i pnpm -g && pnpm i && npm run build
 
 FROM nginx
 RUN mkdir /app
