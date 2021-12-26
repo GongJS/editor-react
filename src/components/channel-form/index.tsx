@@ -66,20 +66,33 @@ const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) =>
     await fetchCreateChannel(payload);
     form.resetFields();
   };
-
+  const handleCopyMessage = (e: ClipboardJS.Event) => {
+    message.success('复制成功', 1);
+    e.clearSelection();
+  };
   useEffect(() => {
-    const clipboard = new ClipboardJS('.copy-button');
-    clipboard.on('success', (e) => {
-      message.success('复制成功', 1);
-      e.clearSelection();
-    });
+    const clipboardArr: ClipboardJS[] = [];
     setTimeout(() => {
       channels.forEach((channel) => {
         generateQRCode(channel.id);
+        const clipboard = new ClipboardJS(`.copy-button-${channel.id}`);
+        clipboard.on('success', handleCopyMessage);
+        clipboardArr.push(clipboard);
       });
     }, 500);
-  }, [channels]);
-
+    return () => {
+      clipboardArr.forEach((item) => {
+        item.destroy();
+      });
+    };
+  }, [channels.length]);
+  useEffect(() => {
+    const clipboard = new ClipboardJS('.copy-button-template');
+    clipboard.on('success', handleCopyMessage);
+    return () => {
+      clipboard.destroy();
+    };
+  }, []);
   useEffect(() => {
     if (
       channels.length > oldChannels.current.length &&
@@ -140,7 +153,7 @@ const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) =>
                       </Col>
                       <Col span={6}>
                         <Button
-                          className="copy-button"
+                          className={`copy-button copy-button-${channel.id}`}
                           data-clipboard-target={`#channel-url-${channel.id}`}
                         >
                           复制
@@ -199,7 +212,7 @@ const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) =>
                     </Col>
                     <Col span={6}>
                       <Button
-                        className="copy-button"
+                        className="copy-button copy-button-template"
                         data-clipboard-target="#channel-url-template"
                       >
                         复制
