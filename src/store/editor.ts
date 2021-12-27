@@ -86,8 +86,7 @@ export interface EditorProps {
 
 const defaultPageData = {
   backgroundColor: '#ffffff',
-  backgroundImage:
-    'url("https://static.imooc-lego.com/upload-files/%E5%B9%BC%E5%84%BF%E5%9B%AD%E8%83%8C%E6%99%AF%E5%9B%BE-994372.jpg")',
+  backgroundImage: '',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   height: '560px',
