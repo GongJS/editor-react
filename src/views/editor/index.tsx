@@ -94,11 +94,9 @@ const Editor: React.FC = () => {
     return res;
   };
   const previewWork = async (drawerVisible = true) => {
-    const res = await saveWork();
-    if (res.errno === 0) {
-      setIsDrawerVisible(drawerVisible);
-      setIsPreviewVisible(true);
-    }
+    await saveWork();
+    setIsDrawerVisible(drawerVisible);
+    setIsPreviewVisible(true);
   };
   const closePreview = () => {
     setIsDrawerVisible(false);
@@ -148,7 +146,7 @@ const Editor: React.FC = () => {
         title="发布成功"
         onCancel={() => setIsChannelFormVisible(false)}
       >
-        <ChannelForm currentWorkId={workId} channels={channelsData?.data.list || []} />
+        <ChannelForm currentWorkId={workId} channels={channelsData?.list || []} />
       </Modal>
       <Drawer
         title="设置面板"

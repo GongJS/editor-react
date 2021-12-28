@@ -26,11 +26,11 @@ const Home: React.FC = () => {
     setPageIndex(pageIndex + 1);
   };
   useEffect(() => {
-    if (templateData?.data?.list.length > 0) {
-      setTemplateListCount(templateData?.data?.count);
-      setTemplateList((pre) => pre.concat(templateData.data.list));
+    if (templateData?.list.length > 0) {
+      setTemplateListCount(templateData?.count);
+      setTemplateList((pre) => pre.concat(templateData.list));
     }
-  }, [templateData?.data?.list]);
+  }, [templateData?.list]);
   return (
     <div className="homepage-container">
       <Layout style={{ background: '#fff' }}>
@@ -52,9 +52,7 @@ const Home: React.FC = () => {
             {!templateListLoading ? (
               <TemplateList
                 list={
-                  templateData?.data?.list.length > 0
-                    ? templateData?.data?.list
-                    : defaultTemplateData
+                  templateData?.list.length > 0 ? templateData?.list : defaultTemplateData
                 }
               />
             ) : (
@@ -74,13 +72,13 @@ const Home: React.FC = () => {
               )}
             </div>
           </div>
-          {user.isLogin && worksData?.data?.list.length > 0 && (
+          {user.isLogin && worksData?.list.length > 0 && (
             <div className="my-works">
               <div className="content-title">
                 <h2>我的作品</h2>
                 {/* <Link to="/mywork">查看我的所有作品</Link> */}
               </div>
-              {!workListLoading ? <WorkList list={worksData?.data?.list} /> : <Spin />}
+              {!workListLoading ? <WorkList list={worksData?.list} /> : <Spin />}
             </div>
           )}
         </Content>

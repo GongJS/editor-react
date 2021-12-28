@@ -1,6 +1,7 @@
 import qs from 'qs';
 import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
+import { message } from 'antd';
 import userData from '@/store/user';
 import useUser from '@/hooks/useUser';
 
@@ -41,7 +42,12 @@ export const http = async (
     }
     const data = await response.json();
     if (response.ok) {
-      return data;
+      if (data.errno === 0) {
+        return data.data;
+      }
+      message.error(data.message);
+    } else {
+      message.error(response.statusText);
     }
     return Promise.reject(data);
   });

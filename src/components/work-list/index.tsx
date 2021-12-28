@@ -17,9 +17,7 @@ const WorkList: React.FC<TemplateListType> = ({ list }) => {
   const { mutateAsync: fetchDeleteWork } = useFetchDeleteWork();
   const handleCreateWork = async (workId: number) => {
     const res = await fetchCopyWork(workId);
-    if (res.errno === 0) {
-      navigate(`/editor/${res.data.id}`);
-    }
+    navigate(`/editor/${res.id}`);
   };
   const handleEditWork = (id: number) => {
     navigate(`/editor/${id}`);

@@ -3,11 +3,8 @@ import { Row, Input, Form, Col, Button, message, Modal } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
 import { isMobile } from '@/helper';
-import { useHttp } from '@/hooks/useHttp';
-import useUser from '@/hooks/useUser';
-import { useUserLogin, getUserInfo } from '@/utils/user';
+import { useUserLogin, useGetCode } from '@/utils/user';
 import Logo2 from '@/assets/logo2.png';
 import './style.less';
 
@@ -15,27 +12,18 @@ export interface LoginByPhoneNumberProps {
   phoneNumber: string;
   veriCode: string;
 }
-const useGetCode = () => {
-  const client = useHttp();
-  return useMutation((params: { phoneNumber: string }) =>
-    client('users/genVeriCode', {
-      data: params,
-      method: 'POST',
-    }),
-  );
-};
+
 const COUNTDOWN_SECONDS = 60;
+
 const Login: React.FC = () => {
   const [form] = Form.useForm();
   const timer = useRef<number | null>(null);
   const [timing, setTiming] = useState(false);
-  const [loginLoading, setLoginLoading] = useState(false);
   const [second, setSecond] = useState(COUNTDOWN_SECONDS);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [code, setCode] = useState('');
   const navigate = useNavigate();
-  const { setUserData } = useUser();
-  const { mutateAsync: userLogin } = useUserLogin();
+  const { mutateAsync: userLogin, isLoading: loginLoading } = useUserLogin();
   const { mutateAsync: getVericode, isLoading: codeLoading } = useGetCode();
 
   const getCode = async () => {
@@ -43,40 +31,19 @@ const Login: React.FC = () => {
     const res = await getVericode({
       phoneNumber: form.getFieldValue('phoneNumber'),
     });
-    if (res.errno === 0) {
-      setTimeout(() => {
-        setCode(res.data.code);
-        setIsModalVisible(true);
-      }, 1000);
-    }
+    setTimeout(() => {
+      setCode(res.code);
+      setIsModalVisible(true);
+    }, 1000);
     message.success('验证码已发送，请注意查收', 5);
   };
 
   const onFinish = async (values: LoginByPhoneNumberProps) => {
-    setLoginLoading(true);
-    const res = await userLogin(values);
-    if (res.errno === 0) {
-      const userInfo = await getUserInfo(res.data.token);
-      if (userInfo.errno === 0) {
-        setUserData({
-          token: res.data.token,
-          isLogin: true,
-          data: {
-            ...userInfo.data,
-          },
-        });
-        message.success('登录成功 2秒后跳转首页');
-        setTimeout(() => {
-          setLoginLoading(false);
-          navigate('/');
-        }, 2000);
-      } else {
-        setLoginLoading(false);
-        message.success(userInfo.message);
-      }
-    } else {
-      message.error(res.message);
-    }
+    await userLogin(values);
+    message.success('登录成功 2秒后跳转首页');
+    setTimeout(() => {
+      navigate('/');
+    }, 2000);
   };
 
   const checkPhone = () => {
@@ -107,10 +74,12 @@ const Login: React.FC = () => {
       }
     };
   }, [timing]);
+
   const copy = () => {
     message.success('验证码复制成功');
     setIsModalVisible(false);
   };
+
   return (
     <div className="login-page">
       <Modal title="验证码" visible={isModalVisible} closable={false} footer={null}>

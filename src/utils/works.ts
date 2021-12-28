@@ -61,9 +61,7 @@ export const useFetchWorkById = (workId?: string) => {
   return useQuery(['work', { workId }], () => client(`works/${workId}`), {
     enabled: Boolean(workId),
     onSuccess: (data) => {
-      if (data.errno === 0) {
-        getWork(data.data);
-      }
+      getWork(data);
     },
   });
 };
@@ -96,12 +94,10 @@ export const useFetchGetChannels = (workId?: string) => {
     {
       enabled: Boolean(workId),
       onSuccess: async (data) => {
-        if (data.errno === 0) {
-          getChannels(data.data.list);
-          if (data.data.list.length === 0 && workId) {
-            await fetchCreatChannel({ name: '默认', workId: parseInt(workId, 10) });
-            await queryClient.invalidateQueries('getChannels');
-          }
+        getChannels(data.list);
+        if (data.list.length === 0 && workId) {
+          await fetchCreatChannel({ name: '默认', workId: parseInt(workId, 10) });
+          await queryClient.invalidateQueries('getChannels');
         }
       },
     },

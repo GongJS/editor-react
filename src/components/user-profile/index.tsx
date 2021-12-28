@@ -21,9 +21,7 @@ const UserProfile: React.FC = () => {
         coverImg: '',
       };
       const workInfo = await createWorks(payload);
-      if (workInfo.errno === 0) {
-        navigate(`/editor/${workInfo.data.id}`);
-      }
+      navigate(`/editor/${workInfo.id}`);
     } else {
       navigate('/login');
     }
@@ -44,9 +42,9 @@ const UserProfile: React.FC = () => {
         <Button type="primary" shape="round" onClick={createDesign} loading={isLoading}>
           创建设计
         </Button>
-        {/*<Button type="primary" shape="round">*/}
-        {/*  <Link to="/mywork">我的作品</Link>*/}
-        {/*</Button>*/}
+        {/* <Button type="primary" shape="round"> */}
+        {/*  <Link to="/mywork">我的作品</Link> */}
+        {/* </Button> */}
         <Dropdown.Button overlay={menu}>
           <Link to="/setting">{user.data.nickName}</Link>
         </Dropdown.Button>
