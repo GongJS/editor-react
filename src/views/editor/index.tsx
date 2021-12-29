@@ -56,6 +56,22 @@ const Editor: React.FC = () => {
     () => `${baseH5URL}/p/preview/${page.id}-${page.uuid}`,
     [page.id, page.uuid],
   );
+
+  const saveWork = async () => {
+    const payload = {
+      content: {
+        components: editor.components,
+        props: page.props,
+        setting: page.setting,
+      },
+      coverImg: coverImg.current,
+      desc: page.desc,
+      title: page.title,
+    };
+    const res = await fetchSaveWork(payload);
+    return res;
+  };
+
   const clearSelection = (e: React.MouseEvent<HTMLDivElement>) => {
     const currentTarget = e.target as HTMLElement;
     if (currentTarget.classList.contains('preview-container')) {
@@ -79,20 +95,7 @@ const Editor: React.FC = () => {
       }
     }
   };
-  const saveWork = async () => {
-    const payload = {
-      content: {
-        components: editor.components,
-        props: page.props,
-        setting: page.setting,
-      },
-      coverImg: coverImg.current,
-      desc: page.desc,
-      title: page.title,
-    };
-    const res = await fetchSaveWork(payload);
-    return res;
-  };
+
   const previewWork = async (drawerVisible = true) => {
     await saveWork();
     setIsDrawerVisible(drawerVisible);
@@ -129,10 +132,7 @@ const Editor: React.FC = () => {
   };
   const menu = (
     <Menu>
-      <Menu.Item onClick={() => logout()}>
-        <Link to="/mywork">我的作品</Link>
-      </Menu.Item>
-      <Menu.Item onClick={() => logout()}>登出</Menu.Item>
+      <Menu.Item onClick={logout}>登出</Menu.Item>
     </Menu>
   );
   return (
@@ -188,12 +188,7 @@ const Editor: React.FC = () => {
             乐高
           </div>
           <div className="user-operation">
-            <Button
-              type="primary"
-              shape="round"
-              onClick={() => previewWork()}
-              loading={isSaving}
-            >
+            <Button type="primary" shape="round" onClick={previewWork} loading={isSaving}>
               预览和设置
             </Button>
             <Button type="primary" shape="round" onClick={saveWork} loading={isSaving}>

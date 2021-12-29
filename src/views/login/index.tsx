@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Row, Input, Form, Col, Button, message, Modal } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
@@ -12,7 +12,7 @@ export interface LoginByPhoneNumberProps {
   phoneNumber: string;
   veriCode: string;
 }
-
+type ValidateStatus = Parameters<typeof Form.Item>[0]['validateStatus'];
 const COUNTDOWN_SECONDS = 60;
 
 const Login: React.FC = () => {
@@ -22,9 +22,43 @@ const Login: React.FC = () => {
   const [second, setSecond] = useState(COUNTDOWN_SECONDS);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [code, setCode] = useState('');
+  const [phone, setPhone] = useState<{
+    value: string;
+    validateStatus?: ValidateStatus;
+    errorMsg?: string | null;
+  }>({
+    value: '',
+  });
   const navigate = useNavigate();
   const { mutateAsync: userLogin, isLoading: loginLoading } = useUserLogin();
   const { mutateAsync: getVericode, isLoading: codeLoading } = useGetCode();
+
+  const validatePhone = (
+    value: string,
+  ): { validateStatus: ValidateStatus; errorMsg: string | null } => {
+    if (isMobile(value?.trim())) {
+      return {
+        validateStatus: 'success',
+        errorMsg: null,
+      };
+    }
+    return {
+      validateStatus: 'error',
+      errorMsg: '请输入正确的手机号',
+    };
+  };
+
+  const onPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone({
+      ...validatePhone(e.target.value),
+      value: e.target.value,
+    });
+  };
+
+  const codeButtonDisable = useMemo(
+    () => !isMobile(form.getFieldValue('phoneNumber')?.trim()) || timing,
+    [phone.value, timing],
+  );
 
   const getCode = async () => {
     setTiming(true);
@@ -44,14 +78,6 @@ const Login: React.FC = () => {
     setTimeout(() => {
       navigate('/');
     }, 2000);
-  };
-
-  const checkPhone = () => {
-    const phone = form.getFieldValue('phoneNumber');
-    if (phone && !isMobile(phone)) {
-      return Promise.reject('手机号码格式错误');
-    }
-    return Promise.resolve();
   };
 
   useEffect(() => {
@@ -109,12 +135,15 @@ const Login: React.FC = () => {
             <Form form={form} layout="vertical" onFinish={onFinish}>
               <Form.Item
                 name="phoneNumber"
-                rules={[
-                  { required: true, message: '手机号码不能为空' },
-                  { validator: checkPhone, message: '手机号码格式有误' },
-                ]}
+                validateStatus={phone.validateStatus}
+                help={phone.errorMsg}
               >
-                <Input prefix={<UserOutlined />} placeholder="手机号码" />
+                <Input
+                  prefix={<UserOutlined />}
+                  placeholder="手机号码"
+                  value={phone.value}
+                  onChange={onPhoneChange}
+                />
               </Form.Item>
               <Form.Item
                 name="veriCode"
@@ -132,7 +161,7 @@ const Login: React.FC = () => {
                 <Button
                   htmlType="button"
                   onClick={getCode}
-                  disabled={timing}
+                  disabled={codeButtonDisable}
                   loading={codeLoading}
                 >
                   {second === 60 ? '获取验证码' : `${second}秒后重发`}

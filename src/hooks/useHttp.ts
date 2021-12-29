@@ -3,7 +3,6 @@ import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { message } from 'antd';
 import userData from '@/store/user';
-import useUser from '@/hooks/useUser';
 
 export const baseH5URL = 'http://1.116.156.44:8082';
 const apiUrl = 'http://1.116.156.44:8081/api';
@@ -34,22 +33,25 @@ export const http = async (
 
   // axios 和 fetch 的表现不一样，axios可以直接在返回状态不为2xx的时候抛出异常
   return window.fetch(`${apiUrl}/${endpoint}`, config).then(async (response) => {
-    if (response.status === 401) {
-      useUser().logout();
-      console.log(401);
-      window.location.reload();
-      return Promise.reject({ message: '请重新登录' });
-    }
-    const data = await response.json();
     if (response.ok) {
+      const data = await response.json();
+      // 请求正常
       if (data.errno === 0) {
         return data.data;
       }
+      // 未登录
+      if (data.errno === 12001) {
+        localStorage.removeItem('token');
+        message.error(data.message);
+        window.location.reload();
+        return Promise.reject(data);
+      }
+      // response code 错误
       message.error(data.message);
     } else {
+      // http code 错误
       message.error(response.statusText);
     }
-    return Promise.reject(data);
   });
 };
 
