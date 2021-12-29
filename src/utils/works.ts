@@ -1,5 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { QueryKey, useMutation, useQuery, useQueryClient } from 'react-query';
 import { useHttp } from '@/hooks/useHttp';
+import { useConfig } from '@/hooks/useOptimisticOptions';
 import { ComponentDataProps } from '@/store/editor';
 import useWork from '@/hooks/useWork';
 
@@ -29,6 +30,19 @@ interface CreateChannelProps {
   workId: number;
 }
 
+interface WorkType {
+  id: string;
+}
+
+interface WorkListType {
+  list: WorkType[];
+}
+export const useDeleteWorkConfig = (queryKey: QueryKey) =>
+  useConfig<WorkListType>(
+    queryKey,
+    (target, old) => old?.list?.filter((item) => item.id !== target.id) || [],
+  );
+
 export const useFetchTemplates = (param: PageParamsProps) => {
   const client = useHttp();
   return useQuery(['templates', param], () => client('templates', { data: param }));
@@ -50,9 +64,12 @@ export const useFetchPublishTemplate = () => {
   );
 };
 
-export const useFetchWorks = (param?: PageParamsProps) => {
+export const useFetchWorks = () => {
   const client = useHttp();
-  return useQuery(['getWorks', param], () => client('works', { data: param }));
+  return useQuery(['works'], () => client('works'), {
+    select: (res) => res.list,
+    initialData: [],
+  });
 };
 
 export const useFetchWorkById = (workId?: string) => {
@@ -132,17 +149,12 @@ export const useFetchCreateWork = () => {
 
 export const useFetchDeleteWork = () => {
   const client = useHttp();
-  const queryClient = useQueryClient();
   return useMutation(
     (workId: string | number) =>
       client(`works/${workId}`, {
         method: 'DELETE',
       }),
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries('getWorks');
-      },
-    },
+    useDeleteWorkConfig(['works']),
   );
 };
 

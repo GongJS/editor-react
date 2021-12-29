@@ -72,13 +72,13 @@ const Home: React.FC = () => {
               )}
             </div>
           </div>
-          {user.isLogin && worksData?.list.length > 0 && (
+          {user.isLogin && worksData?.length > 0 && (
             <div className="my-works">
               <div className="content-title">
                 <h2>我的作品</h2>
                 {/* <Link to="/mywork">查看我的所有作品</Link> */}
               </div>
-              {!workListLoading ? <WorkList list={worksData?.list} /> : <Spin />}
+              {!workListLoading ? <WorkList list={worksData} /> : <Spin />}
             </div>
           )}
         </Content>
