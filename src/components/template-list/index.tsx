@@ -15,7 +15,9 @@ const WorkList: React.FC<TemplateListType> = ({ list }) => {
   const { mutateAsync: fetchCopyWork } = useFetchCopyWork();
   const handleCreateWork = async (workId: number) => {
     const res = await fetchCopyWork(workId.toString());
-    navigate(`/editor/${res.id}`);
+    if (res.errno === 0) {
+      navigate(`/editor/${res.data.id}`);
+    }
   };
   return (
     <div className="template-list-component">

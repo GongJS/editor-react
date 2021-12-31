@@ -1,4 +1,10 @@
-import { QueryKey, useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useInfiniteQuery,
+} from 'react-query';
 import { useHttp } from '@/hooks/useHttp';
 import { useConfig } from '@/hooks/useOptimisticOptions';
 import { ComponentDataProps } from '@/store/editor';
@@ -6,6 +12,7 @@ import useWork from '@/hooks/useWork';
 
 interface PageParamsProps {
   pageIndex: number;
+  pageSize: number;
 }
 
 interface CreateWorksProps {
@@ -43,9 +50,16 @@ export const useDeleteWorkConfig = (queryKey: QueryKey) =>
     (target, old) => old?.list?.filter((item) => item.id !== target.id) || [],
   );
 
-export const useFetchTemplates = (param: PageParamsProps) => {
+export const useFetchTemplates = () => {
   const client = useHttp();
-  return useQuery(['templates', param], () => client('templates', { data: param }));
+  return useInfiniteQuery(
+    'templates',
+    ({ pageParam = 0 }) => client(`templates?pageIndex=${pageParam}&pageSize=4`),
+    {
+      getNextPageParam: (lastPage) =>
+        lastPage.page + 1 < lastPage.pageTotal ? lastPage.page + 1 : undefined,
+    },
+  );
 };
 
 export const useFetchPublishTemplate = () => {
@@ -64,12 +78,18 @@ export const useFetchPublishTemplate = () => {
   );
 };
 
-export const useFetchWorks = () => {
+export const useFetchWorks = (param: PageParamsProps) => {
   const client = useHttp();
-  return useQuery(['works'], () => client('works'), {
-    select: (res) => res.list,
-    initialData: [],
-  });
+  return useQuery(
+    ['works', param],
+    () =>
+      client('works', {
+        data: param,
+      }),
+    {
+      keepPreviousData: true,
+    },
+  );
 };
 
 export const useFetchWorkById = (workId?: string) => {
@@ -94,7 +114,7 @@ export const useFetchCreteChannel = () => {
       }),
     {
       onSuccess: async () => {
-        await queryClient.invalidateQueries('getChannels');
+        await queryClient.invalidateQueries('channels');
       },
     },
   );
@@ -106,7 +126,7 @@ export const useFetchGetChannels = (workId?: string) => {
   const { getChannels } = useWork();
   const { mutateAsync: fetchCreatChannel } = useFetchCreteChannel();
   return useQuery(
-    ['getChannels', { workId }],
+    ['channels', { workId }],
     () => client(`channel/getWorkChannels/${workId}`),
     {
       enabled: Boolean(workId),
@@ -114,7 +134,7 @@ export const useFetchGetChannels = (workId?: string) => {
         getChannels(data.list);
         if (data.list.length === 0 && workId) {
           await fetchCreatChannel({ name: '默认', workId: parseInt(workId, 10) });
-          await queryClient.invalidateQueries('getChannels');
+          await queryClient.invalidateQueries('channels');
         }
       },
     },
@@ -131,7 +151,7 @@ export const useFetchDeleteChannel = () => {
       }),
     {
       onSuccess: async () => {
-        await queryClient.invalidateQueries('getChannels');
+        await queryClient.invalidateQueries('channels');
       },
     },
   );

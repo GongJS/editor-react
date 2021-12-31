@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Layout, Spin, Button } from 'antd';
+import React from 'react';
+import { Layout, Spin, Button, Pagination } from 'antd';
 import { useRecoilValue } from 'recoil';
 import { Link } from 'react-router-dom';
 import userData from '@/store/user';
@@ -7,7 +7,6 @@ import TemplateList from '@/components/template-list';
 import WorkList from '@/components/work-list';
 import UserProfile from '@/components/user-profile';
 import { useFetchTemplates, useFetchWorks } from '@/utils/works';
-import { defaultTemplateData } from '@/defaultData';
 import logo from '@/assets/logo-simple.png';
 import './style.less';
 
@@ -15,22 +14,23 @@ const { Header, Footer, Content } = Layout;
 
 const Home: React.FC = () => {
   const user = useRecoilValue(userData);
-  const [templateListCount, setTemplateListCount] = useState(0);
-  const [templateList, setTemplateList] = useState([]);
-  const [pageIndex, setPageIndex] = useState(0);
-  const { data: templateData, isLoading: templateListLoading } = useFetchTemplates({
+  const [pageIndex, setPageIndex] = React.useState(0);
+  const [pageSize] = React.useState(4);
+  const {
+    data: templateData,
+    isLoading: templateDataLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useFetchTemplates();
+  const { data: worksData, isLoading: workDataLoading } = useFetchWorks({
     pageIndex,
+    pageSize,
   });
-  const { data: worksData, isLoading: workListLoading } = useFetchWorks();
-  const loadMorePage = () => {
-    setPageIndex(pageIndex + 1);
+
+  const onChange = (page: number) => {
+    setPageIndex(page - 1);
   };
-  useEffect(() => {
-    if (templateData?.list.length > 0) {
-      setTemplateListCount(templateData?.count);
-      setTemplateList((pre) => pre.concat(templateData.list));
-    }
-  }, [templateData?.list]);
+
   return (
     <div className="homepage-container">
       <Layout style={{ background: '#fff' }}>
@@ -49,36 +49,39 @@ const Home: React.FC = () => {
               <h2 className="hot-template">热门海报</h2>
               <p>只需替换文字和图片，一键自动生成H5</p>
             </div>
-            {!templateListLoading ? (
+            {!templateDataLoading ? (
               <TemplateList
-                list={
-                  templateData?.list.length > 0 ? templateData?.list : defaultTemplateData
-                }
+                list={templateData?.pages.map((page) => page.list).flat() || []}
               />
             ) : (
               <Spin />
             )}
             <div>
-              {templateList.length < templateListCount && (
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={loadMorePage}
-                  disabled={templateListLoading}
-                  loading={templateListLoading}
-                >
+              {hasNextPage && (
+                <Button type="primary" size="large" onClick={() => fetchNextPage()}>
                   加载更多
                 </Button>
               )}
             </div>
           </div>
-          {user.isLogin && worksData?.length > 0 && (
+          {user.isLogin && worksData?.list?.length > 0 && (
             <div className="my-works">
               <div className="content-title">
                 <h2>我的作品</h2>
                 {/* <Link to="/mywork">查看我的所有作品</Link> */}
               </div>
-              {!workListLoading ? <WorkList list={worksData} /> : <Spin />}
+              {!workDataLoading ? (
+                <>
+                  <WorkList list={worksData.list} />
+                  <Pagination
+                    onChange={onChange}
+                    total={worksData.pageTotal}
+                    defaultPageSize={pageSize}
+                  />
+                </>
+              ) : (
+                <Spin />
+              )}
             </div>
           )}
         </Content>
