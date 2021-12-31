@@ -14,7 +14,7 @@ import {
   useFetchSaveWork,
   useFetchPublishWork,
   useFetchGetChannels,
-} from '@/utils/works';
+} from '@/request/works';
 import ComponentsList from '@/components/components-list';
 import EditorWrapper from '@/components/editor-wrapper';
 import PropsTable from '@/components/props-table';
@@ -132,7 +132,7 @@ const Editor: React.FC = () => {
   };
   const menu = (
     <Menu>
-      <Menu.Item onClick={logout}>登出</Menu.Item>
+      <Menu.Item onClick={() => logout}>登出</Menu.Item>
     </Menu>
   );
   return (
@@ -188,7 +188,12 @@ const Editor: React.FC = () => {
             乐高
           </div>
           <div className="user-operation">
-            <Button type="primary" shape="round" onClick={previewWork} loading={isSaving}>
+            <Button
+              type="primary"
+              shape="round"
+              onClick={() => previewWork}
+              loading={isSaving}
+            >
               预览和设置
             </Button>
             <Button type="primary" shape="round" onClick={saveWork} loading={isSaving}>

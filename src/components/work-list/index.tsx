@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Card, Button, Divider, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { useFetchCopyWork, useFetchDeleteWork } from '@/utils/works';
+import { useFetchCopyWork, useFetchDeleteWork } from '@/request/works';
 import { TemplateDataProps } from '@/store/editor';
 import './style.less';
 

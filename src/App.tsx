@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import userData from '@/store/user';
-import { getUserInfo } from '@/utils/user';
+import { getUserInfo } from '@/request/user';
 import useUser from '@/hooks/useUser';
 import 'antd/dist/antd.less';
 import 'cropperjs/dist/cropper.css';

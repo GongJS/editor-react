@@ -10,7 +10,7 @@ import {
   useFetchCreteChannel,
   useFetchDeleteChannel,
   useFetchPublishTemplate,
-} from '@/utils/works';
+} from '@/request/works';
 import { baseH5URL } from '@/hooks/useHttp';
 import './style.less';
 
@@ -133,7 +133,7 @@ const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) =>
           </Row>
           <Tabs type="card" style={{ marginTop: '20px' }} onChange={tabChange}>
             <TabPane key="channels" tab="发布为作品">
-              {channels.map((channel, index) => (
+              {channels.map((channel) => (
                 <Row key={channel.id} className="channel-item">
                   <Col span={6}>
                     <div

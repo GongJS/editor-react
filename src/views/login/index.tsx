@@ -4,7 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { isMobile } from '@/helper';
-import { useUserLogin, useGetCode } from '@/utils/user';
+import { useUserLogin, useGetCode } from '@/request/user';
 import Logo2 from '@/assets/logo2.png';
 import './style.less';
 

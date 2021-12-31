@@ -2,6 +2,11 @@ import React from 'react';
 import { Typography, Button } from 'antd';
 import './style.less';
 
+interface FullPageErrorFallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
+
 const isError = (value: any): value is Error => value?.message;
 
 export const ErrorBox = ({ error }: { error: unknown }) => {
@@ -11,7 +16,10 @@ export const ErrorBox = ({ error }: { error: unknown }) => {
   return null;
 };
 
-const FullPageErrorFallback: React.FC = ({ error, resetErrorBoundary }) => (
+const FullPageErrorFallback: React.FC<FullPageErrorFallbackProps> = ({
+  error,
+  resetErrorBoundary,
+}) => (
   <div className="full-page-error-fallback">
     <ErrorBox error={error} />
     <Button style={{ marginTop: '50px' }} type="primary" onClick={resetErrorBoundary}>

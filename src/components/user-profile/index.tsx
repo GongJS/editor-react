@@ -5,7 +5,7 @@ import { Button, Dropdown, Menu } from 'antd';
 import { useRecoilValue } from 'recoil';
 import useUser from '@/hooks/useUser';
 import userData from '@/store/user';
-import { useFetchCreateWork } from '@/utils/works';
+import { useFetchCreateWork } from '@/request/works';
 import './style.less';
 
 const UserProfile: React.FC = () => {

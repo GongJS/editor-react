@@ -1,20 +1,18 @@
-import React, {
-  ReactNode, useEffect, useRef, useMemo,
-} from 'react';
+import React, { ReactNode, useEffect, useRef, useMemo } from 'react';
 import { pick } from 'lodash-es';
 import useComponentData from '@/hooks/useComponenetData';
 import { ImageComponentProps, TextComponentProps } from '@/defaultProps';
-import useHotKeys from '@/plugins/useHotKeys';
+import useInitHotKeys from '@/plugins/useInitHotKeys';
 import './style.less';
 
 interface EditorWrapperProps {
-  id: string
-  active: boolean
-  hidden?: boolean
-  children: ReactNode
+  id: string;
+  active: boolean;
+  hidden?: boolean;
+  children: ReactNode;
   props: Partial<TextComponentProps> & Partial<ImageComponentProps>;
 }
-type ResizeDirection = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+type ResizeDirection = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 interface OriginalPositions {
   left: number;
   right: number;
@@ -30,11 +28,14 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
 }) => {
   const gap = { x: 0, y: 0 };
   let isMoving = false;
-  useHotKeys();
+  useInitHotKeys();
   const editWrapper = useRef<null | HTMLDivElement>(null);
   const moveWrapper = useRef<null | HTMLDivElement>(null);
   const { updateComponent } = useComponentData();
-  const style = useMemo(() => pick(props, ['position', 'top', 'left', 'width', 'height']), [props]);
+  const style = useMemo(
+    () => pick(props, ['position', 'top', 'left', 'width', 'height']),
+    [props],
+  );
   const { selectComponent } = useComponentData();
   const caculateMovePosition = (e: MouseEvent) => {
     const container = document.getElementById('canvas-area') as HTMLElement;
@@ -75,11 +76,13 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
-  const caculateSize = (direction: ResizeDirection, e: MouseEvent, positions: OriginalPositions) => {
+  const caculateSize = (
+    direction: ResizeDirection,
+    e: MouseEvent,
+    positions: OriginalPositions,
+  ) => {
     const { clientX, clientY } = e;
-    const {
-      left, right, top, bottom,
-    } = positions;
+    const { left, right, top, bottom } = positions;
     const container = document.getElementById('canvas-area') as HTMLElement;
     const rightWidth = clientX - left;
     const leftWidth = right - clientX;
@@ -116,19 +119,24 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
         break;
     }
   };
-  const startResize = (e: React.MouseEvent<HTMLDivElement>, currentId: string, direction: ResizeDirection) => {
+  const startResize = (
+    e: React.MouseEvent<HTMLDivElement>,
+    currentId: string,
+    direction: ResizeDirection,
+  ) => {
     e.stopPropagation();
     selectComponent(currentId);
     const currentElement = editWrapper.current;
     const moveElement = moveWrapper.current;
     const resizeElements = [currentElement, moveElement];
     if (currentElement && moveElement) {
-      const {
-        left, right, top, bottom,
-      } = currentElement.getBoundingClientRect();
+      const { left, right, top, bottom } = currentElement.getBoundingClientRect();
       const handleMove = (event: MouseEvent) => {
         const size = caculateSize(direction, event, {
-          left, right, top, bottom,
+          left,
+          right,
+          top,
+          bottom,
         });
         updateComponent({ ...size });
         resizeElements.forEach((element) => {
@@ -148,7 +156,10 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
       const handleMouseUp = (event: MouseEvent) => {
         document.removeEventListener('mousemove', handleMove);
         const size = caculateSize(direction, event, {
-          left, right, top, bottom,
+          left,
+          right,
+          top,
+          bottom,
         });
         updateComponent({ ...size });
         setTimeout(() => {
@@ -159,24 +170,41 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
       document.addEventListener('mouseup', handleMouseUp);
     }
   };
-  useEffect(() => {
-  }, [hidden]);
+  useEffect(() => {}, [hidden]);
   return (
     <div
       ref={editWrapper}
       data-component-id={id}
       onClick={() => selectComponent(id)}
       style={style as React.CSSProperties}
-      className={['edit-wrapper', active ? 'active' : null, hidden ? 'hidden' : null].filter((item) => !!item).join(' ')}
+      className={['edit-wrapper', active ? 'active' : null, hidden ? 'hidden' : null]
+        .filter((item) => !!item)
+        .join(' ')}
     >
-      <div className="move-wrapper" ref={moveWrapper} onMouseDown={(e) => startMove(e, id)}>
-        { children }
+      <div
+        className="move-wrapper"
+        ref={moveWrapper}
+        onMouseDown={(e) => startMove(e, id)}
+      >
+        {children}
       </div>
       <div className="resizers">
-        <div className="resizer top-left" onMouseDown={(e) => startResize(e, id, 'top-left')} />
-        <div className="resizer top-right" onMouseDown={(e) => startResize(e, id, 'top-right')} />
-        <div className="resizer bottom-left" onMouseDown={(e) => startResize(e, id, 'bottom-left')} />
-        <div className="resizer bottom-right" onMouseDown={(e) => startResize(e, id, 'bottom-right')} />
+        <div
+          className="resizer top-left"
+          onMouseDown={(e) => startResize(e, id, 'top-left')}
+        />
+        <div
+          className="resizer top-right"
+          onMouseDown={(e) => startResize(e, id, 'top-right')}
+        />
+        <div
+          className="resizer bottom-left"
+          onMouseDown={(e) => startResize(e, id, 'bottom-left')}
+        />
+        <div
+          className="resizer bottom-right"
+          onMouseDown={(e) => startResize(e, id, 'bottom-right')}
+        />
       </div>
     </div>
   );

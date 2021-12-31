@@ -15,8 +15,9 @@
   "homepage": ".",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "antd": "^4.17.2",
+    "antd": "4.17.4",
     "array-move": "^4.0.0",
+    "axios": "^0.24.0",
     "clipboard": "^2.0.8",
     "cropperjs": "^1.5.11",
     "hotkeys-js": "^3.8.3",

@@ -6,7 +6,7 @@ import userData from '@/store/user';
 import TemplateList from '@/components/template-list';
 import WorkList from '@/components/work-list';
 import UserProfile from '@/components/user-profile';
-import { useFetchTemplates, useFetchWorks } from '@/utils/works';
+import { useFetchTemplates, useFetchWorks } from '@/request/works';
 import logo from '@/assets/logo-simple.png';
 import './style.less';
 

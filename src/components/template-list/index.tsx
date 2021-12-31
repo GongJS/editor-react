@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useFetchCopyWork } from '@/utils/works';
+import { useFetchCopyWork } from '@/request/works';
 import { TemplateDataProps } from '@/store/editor';
 import './style.less';
 
