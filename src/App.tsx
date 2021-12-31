@@ -3,14 +3,15 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useRecoilValue } from 'recoil';
 import userData from '@/store/user';
-import Home from '@/views/home';
-import Editor from '@/views/editor';
-import Login from '@/views/login';
 import { getUserInfo } from '@/utils/user';
 import useUser from '@/hooks/useUser';
 import 'antd/dist/antd.less';
 import 'cropperjs/dist/cropper.css';
 import './App.css';
+
+const Home = React.lazy(() => import('@/views/home'));
+const Editor = React.lazy(() => import('@/views/editor'));
+const Login = React.lazy(() => import('@/views/login'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
