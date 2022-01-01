@@ -36,8 +36,8 @@ const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) =>
 
   const generateChannelURL = (id?: number) =>
     id
-      ? `${baseH5URL}/p/${page.id}-${page.uuid}?channel=${id}`
-      : `${baseH5URL}/p/${page.id}-${page.uuid}`;
+      ? `${baseH5URL}/${page.id}-${page.uuid}?channel=${id}`
+      : `${baseH5URL}/${page.id}-${page.uuid}`;
 
   const generateQRCode = (id?: number) => {
     const ele = document.getElementById(

@@ -4,8 +4,8 @@ import { useRecoilValue } from 'recoil';
 import { message } from 'antd';
 import userData from '@/store/user';
 
-export const baseH5URL = 'http://1.116.156.44:8082';
-const apiUrl = 'http://1.116.156.44:8081/api';
+export const baseH5URL = 'https://koa-img.herokuapp.com/p';
+const apiUrl = 'https://api-proxy-six.vercel.app/api';
 
 interface Config extends RequestInit {
   token?: string;

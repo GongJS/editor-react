@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { Layout, Tabs, Empty, Button, Dropdown, Menu, Spin, Drawer, Modal } from 'antd';
 import { useRecoilValue } from 'recoil';
 import { Link, useParams } from 'react-router-dom';
@@ -53,7 +53,7 @@ const Editor: React.FC = () => {
   const { data: channelsData, refetch: refetchChannels } = useFetchGetChannels(workId);
 
   const previewURL = useMemo(
-    () => `${baseH5URL}/p/preview/${page.id}-${page.uuid}`,
+    () => `${baseH5URL}/preview/${page.id}-${page.uuid}`,
     [page.id, page.uuid],
   );
 
@@ -132,7 +132,7 @@ const Editor: React.FC = () => {
   };
   const menu = (
     <Menu>
-      <Menu.Item onClick={() => logout}>登出</Menu.Item>
+      <Menu.Item onClick={() => logout()}>登出</Menu.Item>
     </Menu>
   );
   return (
@@ -191,7 +191,7 @@ const Editor: React.FC = () => {
             <Button
               type="primary"
               shape="round"
-              onClick={() => previewWork}
+              onClick={() => previewWork()}
               loading={isSaving}
             >
               预览和设置

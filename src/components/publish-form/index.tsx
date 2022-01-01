@@ -49,6 +49,7 @@ const PublishForm: React.FC<PublishFormProps> = ({
       document.getElementById('preview-barcode-container'),
     );
   }, []);
+
   return (
     <div className="publish-form-container">
       <Row align="middle" style={{ marginBottom: '20px' }}>
