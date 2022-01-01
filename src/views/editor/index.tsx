@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { Layout, Tabs, Empty, Button, Dropdown, Menu, Spin, Drawer, Modal } from 'antd';
 import { useRecoilValue } from 'recoil';
 import { Link, useParams } from 'react-router-dom';
@@ -58,6 +58,7 @@ const Editor: React.FC = () => {
   );
 
   const saveWork = async () => {
+    cancelComponent();
     const payload = {
       content: {
         components: editor.components,
@@ -81,6 +82,7 @@ const Editor: React.FC = () => {
   const takeScreenUpdate = async (checkSave = false) => {
     try {
       const rawData = await takeScreenshotAndUpload('canvas-area');
+      console.log(7777, rawData);
       if (rawData) {
         const url = rawData.data.urls[0];
         updatePageNormalData('coverImg', url);
@@ -106,6 +108,7 @@ const Editor: React.FC = () => {
     setIsPreviewVisible(false);
   };
   const handlePublishWork = async () => {
+    cancelComponent();
     setIsPublishing(true);
     setTimeout(async () => {
       await takeScreenUpdate();
@@ -146,7 +149,11 @@ const Editor: React.FC = () => {
         title="发布成功"
         onCancel={() => setIsChannelFormVisible(false)}
       >
-        <ChannelForm currentWorkId={workId} channels={channelsData?.list || []} />
+        <ChannelForm
+          currentWorkId={workId}
+          channels={channelsData?.list || []}
+          coverImg={coverImg.current}
+        />
       </Modal>
       <Drawer
         title="设置面板"

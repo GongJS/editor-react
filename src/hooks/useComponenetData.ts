@@ -3,10 +3,13 @@ import { message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep } from 'lodash-es';
 import { useEffect, useState } from 'react';
-import componentData, { ComponentDataProps, getCurrentElement, historyComponentsData } from '@/store/editor';
-import useDebounce from '@/hooks/useDebounce';
+import componentData, {
+  ComponentDataProps,
+  getCurrentElement,
+  historyComponentsData,
+} from '@/store/editor';
 
-export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
+export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right';
 const useComponentData = () => {
   const [editor, setEditor] = useRecoilState(componentData);
   const [canUndo, setCanUndo] = useState(false);
@@ -34,7 +37,11 @@ const useComponentData = () => {
     }));
   };
 
-  const originUpdateComponent = (newValues:{ [p: string]: string}, id?: string, isRoot?: boolean) => {
+  const updateComponent = (
+    newValues: { [p: string]: string },
+    id?: string,
+    isRoot?: boolean,
+  ) => {
     if (!currentElement) return;
     copyComponents.map((component: ComponentDataProps) => {
       if (isRoot) {
@@ -58,8 +65,6 @@ const useComponentData = () => {
       }));
     }
   };
-
-  const updateComponent = useDebounce(originUpdateComponent, 1);
 
   const addComponent = (component: ComponentDataProps) => {
     if (!component) return;
@@ -137,7 +142,9 @@ const useComponentData = () => {
 
   const deleteComponent = () => {
     if (!currentElement) return;
-    const components = editor.components.filter((component) => component.id !== currentElement.id);
+    const components = editor.components.filter(
+      (component) => component.id !== currentElement.id,
+    );
     setComponentsData(components);
   };
 

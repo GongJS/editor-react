@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useRef, useMemo } from 'react';
 import { pick } from 'lodash-es';
 import useComponentData from '@/hooks/useComponenetData';
+import useDebounce from '@/hooks/useDebounce';
 import { ImageComponentProps, TextComponentProps } from '@/defaultProps';
 import useInitHotKeys from '@/plugins/useInitHotKeys';
 import './style.less';
@@ -32,6 +33,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
   const editWrapper = useRef<null | HTMLDivElement>(null);
   const moveWrapper = useRef<null | HTMLDivElement>(null);
   const { updateComponent } = useComponentData();
+  const updateComponentSize = useDebounce(updateComponent, 1);
   const style = useMemo(
     () => pick(props, ['position', 'top', 'left', 'width', 'height']),
     [props],
@@ -138,7 +140,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
           top,
           bottom,
         });
-        updateComponent({ ...size });
+        updateComponentSize({ ...size });
         resizeElements.forEach((element) => {
           const { style } = element!;
           if (size) {
@@ -155,13 +157,6 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
       };
       const handleMouseUp = (event: MouseEvent) => {
         document.removeEventListener('mousemove', handleMove);
-        const size = caculateSize(direction, event, {
-          left,
-          right,
-          top,
-          bottom,
-        });
-        updateComponent({ ...size });
         setTimeout(() => {
           document.removeEventListener('mouseup', handleMouseUp);
         });
