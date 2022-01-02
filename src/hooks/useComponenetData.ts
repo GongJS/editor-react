@@ -38,7 +38,7 @@ const useComponentData = () => {
   };
 
   const updateComponent = (
-    newValues: { [p: string]: string },
+    newValues: { [p: string]: any },
     id?: string,
     isRoot?: boolean,
   ) => {
