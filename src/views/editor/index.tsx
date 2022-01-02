@@ -82,7 +82,6 @@ const Editor: React.FC = () => {
   const takeScreenUpdate = async (checkSave = false) => {
     try {
       const rawData = await takeScreenshotAndUpload('canvas-area');
-      console.log(7777, rawData);
       if (rawData) {
         const url = rawData.data.urls[0];
         updatePageNormalData('coverImg', url);

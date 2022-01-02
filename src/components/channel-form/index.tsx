@@ -19,8 +19,13 @@ const { TabPane } = Tabs;
 interface ChannelFormProps {
   currentWorkId?: string;
   channels: ChannelDataProps[];
+  coverImg?: string;
 }
-const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) => {
+const ChannelForm: React.FC<ChannelFormProps> = ({
+  currentWorkId,
+  channels,
+  coverImg,
+}) => {
   const [form] = Form.useForm();
   const qrCodeGenerated = useRef(false);
   const { mutateAsync: fetchDeleteChannel, isLoading: deleteLoading } =
@@ -113,7 +118,7 @@ const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) =>
       <Row style={{ marginBottom: '20px' }}>
         <Col span={8} className="left-col">
           封面图
-          <img src={page.coverImg} alt={page.title} />
+          <img src={page.coverImg || coverImg} alt={page.title} />
         </Col>
         <Col span={16} className="right-col">
           <Row>
@@ -241,5 +246,6 @@ const ChannelForm: React.FC<ChannelFormProps> = ({ currentWorkId, channels }) =>
 
 ChannelForm.defaultProps = {
   currentWorkId: '',
+  coverImg: '',
 };
 export default ChannelForm;
