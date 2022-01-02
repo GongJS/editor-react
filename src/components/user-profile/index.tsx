@@ -28,7 +28,15 @@ const UserProfile: React.FC = () => {
   };
   const menu = (
     <Menu>
-      <Menu.Item onClick={() => logout()}>登出</Menu.Item>
+      <Menu.Item onClick={() => logout()} key={1}>
+        登出
+      </Menu.Item>
+      <Menu.Item
+        onClick={() => window.open('https://github.com/GongJS/editor-react')}
+        key={2}
+      >
+        Github
+      </Menu.Item>
     </Menu>
   );
   return (
