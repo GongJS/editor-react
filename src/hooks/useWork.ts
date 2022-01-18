@@ -27,16 +27,16 @@ const useWork = () => {
       ...rest,
       props: {
         ...oldPage.props,
-        ...content.props,
+        ...(content && { ...content.props }),
       },
       setting: {
         ...oldPage.setting,
-        ...content.setting,
+        ...(content && { ...content.setting }),
       },
     }));
     setComponent((oldComponent) => ({
       ...oldComponent,
-      components: [...content.components],
+      ...(content && { components: content.components }),
     }));
   };
   const saveWork = () => {

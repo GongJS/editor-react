@@ -57,7 +57,7 @@ export const useFetchTemplates = () => {
     ({ pageParam = 0 }) => client(`templates?pageIndex=${pageParam}&pageSize=4`),
     {
       getNextPageParam: (lastPage) =>
-        lastPage.page + 1 < lastPage.pageTotal ? lastPage.page + 1 : undefined,
+        lastPage.pageIndex + 1 < lastPage.pageTotal ? lastPage.pageIndex + 1 : undefined,
     },
   );
 };

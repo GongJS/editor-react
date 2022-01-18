@@ -11,7 +11,7 @@ import {
   useFetchDeleteChannel,
   useFetchPublishTemplate,
 } from '@/request/works';
-import { baseH5URL } from '@/hooks/useHttp';
+import { apiUrl } from '@/hooks/useHttp';
 import './style.less';
 
 const { TabPane } = Tabs;
@@ -41,8 +41,8 @@ const ChannelForm: React.FC<ChannelFormProps> = ({
 
   const generateChannelURL = (id?: number) =>
     id
-      ? `${baseH5URL}/${page.id}-${page.uuid}?channel=${id}`
-      : `${baseH5URL}/${page.id}-${page.uuid}`;
+      ? `${apiUrl}/pages/${page.id}-${page.uuid}?channel=${id}`
+      : `${apiUrl}/pages/${page.id}-${page.uuid}`;
 
   const generateQRCode = (id?: number) => {
     const ele = document.getElementById(

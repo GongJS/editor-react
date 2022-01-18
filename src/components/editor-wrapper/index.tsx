@@ -32,7 +32,7 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
   useInitHotKeys();
   const editWrapper = useRef<null | HTMLDivElement>(null);
   const moveWrapper = useRef<null | HTMLDivElement>(null);
-  const { updateComponent } = useComponentData();
+  const { updateComponent, cancelComponent } = useComponentData();
   const updateComponentSize = useDebounce(updateComponent, 1);
   const style = useMemo(
     () => pick(props, ['position', 'top', 'left', 'width', 'height']),
@@ -66,14 +66,12 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
     };
     const handleMouseUp = (mouseUpEvent: MouseEvent) => {
       document.removeEventListener('mousemove', handleMove);
+      document.removeEventListener('mouseup', handleMouseUp);
       if (isMoving) {
         const { left, top } = caculateMovePosition(mouseUpEvent);
-        updateComponent({ left, top });
+        updateComponent({ left, top }, currentId);
         isMoving = false;
       }
-      setTimeout(() => {
-        document.removeEventListener('mouseup', handleMouseUp);
-      });
     };
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('mouseup', handleMouseUp);
@@ -170,7 +168,6 @@ const EditorWrapper: React.FC<EditorWrapperProps> = ({
     <div
       ref={editWrapper}
       data-component-id={id}
-      onClick={() => selectComponent(id)}
       style={style as React.CSSProperties}
       className={['edit-wrapper', active ? 'active' : null, hidden ? 'hidden' : null]
         .filter((item) => !!item)

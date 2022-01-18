@@ -2,6 +2,7 @@ import { message } from 'antd';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 import { UploadResp } from '@/extraType';
+import { apiUrl } from '@/hooks/useHttp';
 
 interface CheckCondition {
   format?: string[];
@@ -96,9 +97,10 @@ export const takeScreenshotAndUpload = (id: string) => {
             const formData = new FormData();
             formData.append('file', newFile);
             axios
-              .post('http://1.116.156.44:8081/api/utils/upload-img', formData, {
+              .post(`${apiUrl}/utils/upload-img`, formData, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
+                  Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
                 timeout: 10000,
               })

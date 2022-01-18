@@ -42,13 +42,14 @@ const useComponentData = () => {
     id?: string,
     isRoot?: boolean,
   ) => {
-    if (!currentElement) return;
+    const currentId = id || currentElement?.id;
+    if (!currentId) return;
     copyComponents.map((component: ComponentDataProps) => {
       if (isRoot) {
         if (component.id === id) {
           component = { ...component, ...newValues };
         }
-      } else if (component.id === currentElement?.id) {
+      } else if (component.id === currentId) {
         component.props = { ...component.props, ...newValues };
       }
       return component;

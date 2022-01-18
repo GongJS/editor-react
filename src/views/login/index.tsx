@@ -66,7 +66,7 @@ const Login: React.FC = () => {
       phoneNumber: form.getFieldValue('phoneNumber'),
     });
     setTimeout(() => {
-      setCode(res.code);
+      setCode(res.veriCode);
       setIsModalVisible(true);
     }, 1000);
     message.success('验证码已发送，请注意查收', 5);

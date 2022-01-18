@@ -7,7 +7,7 @@ import componentData, { getCurrentElement, pageData } from '@/store/editor';
 import userData from '@/store/user';
 import useUser from '@/hooks/useUser';
 import usePageData from '@/hooks/usePageData';
-import { baseH5URL } from '@/hooks/useHttp';
+import { apiUrl } from '@/hooks/useHttp';
 import useComponentData from '@/hooks/useComponenetData';
 import {
   useFetchWorkById,
@@ -53,7 +53,7 @@ const Editor: React.FC = () => {
   const { data: channelsData, refetch: refetchChannels } = useFetchGetChannels(workId);
 
   const previewURL = useMemo(
-    () => `${baseH5URL}/preview/${page.id}-${page.uuid}`,
+    () => `${apiUrl}/pages/${page.id}-${page.uuid}`,
     [page.id, page.uuid],
   );
 

@@ -75,8 +75,8 @@ const Home: React.FC = () => {
                   <WorkList list={worksData.list} />
                   <Pagination
                     onChange={onChange}
-                    total={worksData.pageTotal}
-                    defaultPageSize={pageSize}
+                    total={worksData.count}
+                    pageSize={pageSize}
                   />
                 </>
               ) : (

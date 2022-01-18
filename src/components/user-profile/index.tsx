@@ -53,9 +53,11 @@ const UserProfile: React.FC = () => {
         {/* <Button type="primary" shape="round"> */}
         {/*  <Link to="/mywork">我的作品</Link> */}
         {/* </Button> */}
-        <Dropdown.Button overlay={menu}>
-          <Link to="/setting">{user.data.nickName}</Link>
-        </Dropdown.Button>
+        {user.isLogin && (
+          <Dropdown.Button overlay={menu}>
+            <Link to="/setting">{user.data.nickName}</Link>
+          </Dropdown.Button>
+        )}
       </div>
     </div>
   );
