@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { message } from 'antd';
 import userData from '@/store/user';
 
-export const apiUrl = 'http://1.116.156.44:7001/api';
+export const apiUrl = 'https://editor-server.ooaaoo.top/api';
 
 interface Config extends RequestInit {
   token?: string;
